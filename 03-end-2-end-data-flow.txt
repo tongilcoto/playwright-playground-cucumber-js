@@ -1,0 +1,259 @@
+
+# E2E DATA FLOW
+
+Previous tests were about web page architecture and in-page actions.
+E2E data flow refers how the data is passed through the pages by following the purchase flow.
+There are steps forward and steps backward. Both must take into account the purchased products.
+
+
+LOGIN
+
+Feature: Dummmy Feature
+
+Scenario: Successful Login when using valid user and valid password
+    Given I am "standard_user" user
+    When I login with user "valid" password
+    Then I see "Products" page
+        - L3. CP1: page title
+
+Scenario Outline: Invalid Login when using valid user and locked user and invalid password
+    Given I am "<user>" user
+    When I login with user "invalid" password
+    Then I see "Login" error at Login page 
+        - L1. CP1: error element + configured text
+
+Examples:
+    | user |
+    | standard_user |
+    | locked_out_user |
+
+Scenario: Locked Out login when using locked out user and valid password
+    Given I am "locked_out_user" user
+    When I login with user "valid" password
+    Then I see "Locked_Out" error at Login page 
+        - L1. CP1: error element + configured text 
+    
+ 
+ [PAGE] PRODUCTS
+ 
+ - Product Detail access
+        - L3. CP1: page title
+ - Buy - 1 
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge created
+ - Buy - 2
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge updated
+ - Remove Not last product
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge updated
+ - Remove last product
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge deleted
+ - Shopping cart access
+        - L3. CP1: page title
+ - Open Burger menu
+        - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+ - Close Burger menu
+        - L1. CP1: table element invisible 
+        - L1. CP2: Burger menu is visible
+ - All Items
+        - L2. CP1: products page title
+        - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+ - About SauceLabs
+        - L3. CP1: Saucelabs page title
+ - Logout
+        - L2. CP1: Login button
+ - Reset
+        - L1. CP1: All products with Add To Cart text
+        - L1. CP2: shopping cart icon with no badge
+ 
+ 
+ [PAGE]  DETAIL
+ 
+ - Buy First
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge created
+ - Buy Not the First
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge updated
+ - Remove not the last product
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge updated
+ - Remove last product
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge deleted
+ - Back to products
+        - L2. CP1: products page title
+        - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+ - Shopping cart access
+        - L3. CP1: page title
+ - Open Burger menu
+        - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+ - Close Burger menu
+        - L1. CP1: table element invisible 
+        - L1. CP2: Burger menu is visible
+ - All Items
+        - L2. CP1: products page title
+        - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+ - About SauceLabs
+        - L3. CP1: Saucelabs page title
+ - Logout
+        - L2. CP1: Login button
+ - Reset
+        - L1. CP1: All products with Add To Cart text
+        - L1. CP2: shopping cart icon with no badge
+ 
+ 
+ [PAGE]  YOUR CART
+ 
+ - Remove Not Last
+       - L1. CP1: button text changed
+       - L1. CP2: shopping cart icon badge updated
+ - Remove Last
+       - L1. CP1: button text changed
+       - L1. CP2: shopping cart icon badge deleted
+ - Checkout access. Enabled with products.
+       - L3. CP1: page title
+ - Checkout access. Disabled without products.
+       - L1. CP1: button is disable
+ - Continue Shopping
+       - L3. CP1: page title
+ - Shopping cart access
+        - L3. CP1: page title
+ - Open Burger menu
+        - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+ - Close Burger menu
+        - L1. CP1: table element invisible 
+        - L1. CP2: Burger menu is visible
+ - All Items
+        - L2. CP1: products page title
+        - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+ - About SauceLabs
+        - L3. CP1: Saucelabs page title
+ - Logout
+        - L2. CP1: Login button
+ - Reset
+        - L1. CP1: All products with Add To Cart text
+        - L1. CP2: shopping cart icon with no badge
+ 
+ 
+ [PAGE] CHECKOUT: YOUR INFORMATION
+ 
+ - Invalid Continue - first name missing
+       - L1. CP1: error banner + configured text
+       - L1. CP2: red font + configured text + X red icon
+ - Invalid Continue - last name missing
+       - L1. CP1: error banner + configured text
+       - L1. CP2: red font + configured text + X red icon
+ - Invalid Continue - zip/postal code missing
+       - L1. CP1: error banner + configured text
+       - L1. CP2: red font + configured text + X red icon
+ - Invalid Continue - all missing
+       - L1. CP1: error banner + configured text for first missing field
+       - L1. CP2: red font + configured text + X red icon
+ - Invalid Continue - only one (random) field is filled 
+       - L1. CP1: error banner + configured text for first missing field
+       - L1. CP2: red font + configured text + X red icon - Valid Continue
+ - Valid Continue
+       - L3. CP1: page title
+ - Cancel
+       - L3. CP1: page title
+ - Shopping cart access
+       - L3. CP1: page title
+ - Open Burger menu
+       - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+ - Close Burger menu
+       - L1. CP1: table element invisible 
+       - L1. CP2: Burger menu is visible
+ - All Items
+       - L2. CP1: products page title
+       - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+ - About SauceLabs
+       - L3. CP1: Saucelabs page title
+ - Logout
+       - L2. CP1: Login button
+ - Reset
+       - L1. CP1: All products with Add To Cart text
+       - L1. CP2: shopping cart icon with no badge
+
+
+[PAGE] CHECKOUT: OVERVIEW
+
+- Finish purchase
+       - L3. CP1: page title
+- Cancel
+       - L3. CP1: page title
+- Shopping cart access
+       - L3. CP1: page title
+- Open Burger menu
+       - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+- Close Burger menu
+       - L1. CP1: table element invisible 
+       - L1. CP2: Burger menu is visible
+- Select All Items
+       - L2. CP1: products page title
+       - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+- About SauceLabs
+       - L3. CP1: Saucelabs page title
+- Logout
+       - L2. CP1: Login button
+- Reset
+       - L1. CP1: All products with Add To Cart text
+       - L1. CP2: shopping cart icon with no badge
+
+
+ [PAGE] CHECKOUT: COMPLETE!
+ 
+- Back Home
+       - L2. CP1: All products with Add To Cart text
+       - L2. CP2: shopping cart icon with no badge
+- Shopping cart access
+       - L3. CP1: page title
+- Open Burger menu
+       - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+- Close Burger menu
+       - L1. CP1: table element invisible 
+       - L1. CP2: Burger menu is visible
+- Select All Items
+       - L2. CP1: products page title
+       - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+- About SauceLabs
+       - L3. CP1: Saucelabs page title
+- Logout
+       - L2. CP1: Login button
+- Reset
+       - L1. CP1: All products with Add To Cart text
+       - L1. CP2: shopping cart icon with no badge
+
+
+[E2E] 
+
+# Forward
+- Products-Shopping Cart shows purchased products. One product
+- Products-Shopping Cart shows purchased products. Two product
+- Product-Detail shows purchased product. Just selected product in Products. 
+- Product-Detail shows purchased product. None selected product in Products
+- Product-Detail shows purchased product. Select another product in Products
+- Detail-Shopping Cart shows purchased products. Selected product
+- Detail-Shopping Cart shows purchased products. Just another product
+- Detail-Shopping Cart shows purchased products. Selected product and another one
+- Overview shows purchased products. One product
+- Overview shows purchased products. Two products
+- Finished purchase resets shopping cart. Products page
+- Finished purchase resets shopping cart. Shopping cart
+
+
+# Backwards
+- Detail's Back to Products keeps purchased products with no cart change
+- Detail's Back to Products keeps purchased products after product is added
+- Detail's Back to Products keeps purchased products after product is removed
+- Cart's Continue Shopping keeps purchased products with no cart changed
+- Cart's Continue Shopping keeps purchased products after product is added
+- Cart's Continue Shopping keeps purchased products after product is removed
+- Your Information's Shopping Cart keeps purchased products
+- Your Information's Cancel keeps purchased products
+- Overview's Shopping Cart keeps purchased products
+- Overview's Cancel keeps purchased products
+- Left Menu's Reset resets shopping cart
+

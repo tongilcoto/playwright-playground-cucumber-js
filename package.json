@@ -1,0 +1,27 @@
+{
+  "name": "playwright-playground-cucumber",
+  "version": "1.0.0",
+  "description": "Playwright with BDD. Cucumber runner",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/cucumber-js --require tests --publish-quiet",
+    "report": "./node_modules/.bin/cucumber-js --require tests --publish-quiet --format json:./reports/cucumber.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ton-Gil/playwright-playground-cucumber-js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ton-Gil/playwright-playground-cucumber-js/issues"
+  },
+  "homepage": "https://github.com/Ton-Gil/playwright-playground-cucumber-js#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.29.2"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^8.10.0"
+  }
+}

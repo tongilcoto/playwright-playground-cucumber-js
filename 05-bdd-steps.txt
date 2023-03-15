@@ -1,0 +1,839 @@
+
+# BDD steps
+
+It is time for developing the gherkin steps.
+We will build two kinds of steps: 
+- Simple
+- Complex
+Complex steps are just a bunch of simple steps that are merged into only one.
+This principle will allow great reusability coverage if performed right.
+How to differenciate them? By using a Domain Specific Language agreement: the step definition will include words combination that will made it clear.
+
+The framework, i.e. the steps library, will be built upon that foundation, embracing new feature areas by developing simple and complex steps accordingly
+Another requirement for step reusability is that each step must not infere any information from previous steps, it must be auto-defined, for example, the page where the action is performed
+
+LOGIN
+
+Feature: Dummmy Feature
+
+Scenario: Successful Login when using valid user and valid password
+    Given I am "standard_user" user  --> Simple Step
+    When I login with user "valid" password  --> Simple Step
+    Then I see "Products" page  --> Simple Step
+        - L3. CP1: page title
+Scenario Outline: Invalid Login when using valid user and locked user and invalid password
+    Given I am "<user>" user  --> Simple Step
+    When I login with user "invalid" password  --> Simple Step
+    Then I see "Login" error at Login page  --> Simple Step
+        - L1. CP1: error element + configured text
+
+Examples:
+    | user |
+    | standard_user |
+    | locked_out_user |
+
+Scenario: Locked Out login when using locked out user and valid password
+    Given I am "locked_out_user" user  --> Simple Step
+    When I login with user "valid" password  --> Simple Step
+    Then I see "Locked_Out" error at Login page  --> Simple Step
+        - L1. CP1: error element + configured text 
+    
+ With just 4 parametrised steps we have covered the LOGIN features area
+- I am "(standard_user|locked_out_user)" user
+- I login with user "(valid|invalid)" password
+- I see "(Products)" page
+- I see "(Login|Locked_Out)" error at Login page
+
+Next step is to build the BDD steps, by selecting the appropiate key words, that efficiently cover the user navigation actions
+
+[PAGE] PRODUCTS
+
+The tests we already have are only mention the conditions and the checkpoints, we need to build the navigation steps, including the login
+Since the less steps the better, we should integrate the login action into just one step 
+
+ - Product Detail access. Name
+        - L3. CP1: page title
+Given I am logged into Products page with "standard_user" user --> Complex step
+When I select "unselected" "random" product "name" --> Simple step. No page reference since it is the only page where you can see more than one product 
+Then I see Detail page for "selected" product --> Simple step with product reference
+
+ - Product Detail access. Image
+Given I am logged into Products page with "standard_user" user--> Complex step
+When I select "unselected" "random" product "image" --> Simple step. No page reference since it is the only page where you can see more than one product 
+Then I see Detail page for "selected" product --> Simple step with product reference
+
+ - Buy - 1 
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge created
+Given I am logged into Products page with "standard_user" user --> Complex step
+When I select "Add To Cart" option for "1" "unselected" random products at "Products" page --> Simple step with page reference
+Then I see product option is "Remove" for "selected" products at "Products page" --> Simple step 
+And I see "1" badge in shopping cart at "Products" page --> Simple step with page reference
+
+ - Buy - 2
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge updated
+Given I am logged into Products page with "standard_user" user --> Complex step
+When I select "Add To Cart" option for "2" "unselected" random products --> Simple step. 
+Then I see product option is "Remove" for "selected" products at "Products" page
+And I see "2" badge in shopping cart at "Products" page --> Simple step with page reference
+
+ - Remove Not last product
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge updated
+Given I am logged into Products page with "standard_user" user --> Complex step
+And I select "Add To Cart" option for "2" "unselected" random products at Products page --> Simple step
+When I select "Remove" option for "1" "selected" random products at Products page --> Simple step
+Then I see product option is "Add To Cart" for "last" "selected" product at "Products" page
+And I see "1" badge in shopping cart at "Products" page --> Simple step with page reference
+
+ - Remove last product
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge deleted
+Given I am logged into Products page with "standard_user" user --> Complex step
+And I select "Add To Cart" option for "1" "unselected" random products at "Products" page --> Simple step
+When I select "Remove" option for "1" "selected" random products at "Products" page --> Simple step
+Then I see product option is "Add To Cart" for "all" products at "Products" page
+And I don't see any badge in shopping cart at "Products" page --> Simple step with page reference
+
+ - Shopping cart access
+        - L3. CP1: page title
+Given I am logged into Products page with "standard_user" user --> Complex step
+When I select "Shopping Cart" option at "Products" page --> Simple step with page reference
+Then I see "Your Cart" page
+
+ - Open Burger menu
+        - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+Given I am logged into Products page with "standard_user" user --> Complex step
+When I select "Menu" option at "Products" page --> Simple step with page reference
+Then I see the left menu
+
+ - Close Burger menu
+        - L1. CP1: table element invisible 
+        - L1. CP2: Burger menu is visible
+Given I am logged into Products page with "standard_user" user --> Complex step
+And I select "Menu" option at "Products" page --> Simple step with page reference
+When I select "Close" option at the left menu
+Then I see the "Menu option" at "Products" page
+
+ - All Items
+        - L2. CP1: products page title
+        - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+Given I am logged into Products page with "standard_user" user --> Complex step
+And I select "Menu" option at "Products" page --> Simple step with page reference
+When I select "All Items" option at the left menu
+Then I see "Products" page  --> Simple Step
+And I see the "Menu option" at "Products" page
+And I see the "products grid" at "Products" page
+
+ - About SauceLabs
+        - L3. CP1: Saucelabs page title
+Given I am logged into Products page with "standard_user" user --> Complex step
+And I select "Menu" option at "Products" page --> Simple step with page reference
+When I select "About" option at the left menu
+Then I see "Saucelabs" page  --> Simple Step
+
+ - Logout
+        - L2. CP1: Login button
+Given I am logged into Products page with "standard_user" user --> Complex step
+And I select "Menu" option at "Products" page --> Simple step with page reference
+When I select "Logout" option at the left menu
+Then I see "Login" option at "Login" page  --> Simple Step
+
+ - Reset
+        - L1. CP1: All products with Add To Cart text
+        - L1. CP2: shopping cart icon with no badge
+Given I am logged into Products page with "standard_user" user --> Complex step
+And I select "Menu" option at "Products" page --> Simple step with page reference
+When I select "Reset App State" option at the left menu
+Then I don't see any badge in shopping cart at "Products" page --> Simple step with page reference
+And I see product option is "Add To Cart" for "all" products at "Products" page
+   
+
+Wrapping up the new steps:
+
+Usually the steps are splitted into several files, the most common criteria is to group them by page.
+So previous login steps will be at the login page steps file (except 'I see "Products" page') and these Products page steps wiil be at the products page steps file.
+More on this ... Cucumber framework allows to repeat the same parametrised step in several files, as long as their parameter's value is different.
+In any case, this technique only applies for Cucumber files, take into account that steps library in the test management tool (Xray) will see the steps library as a whole
+
+So, for products page (plus the previous I see "Products" page step) we've got these steps:
+- I am logged into Products page with "standard_user" user --> Complex step
+- I select "(random|<any product name>)" product "(name|image)" --> Simple step (no need for page reference since Products page is the only page where you can select random productS)
+-- New version: I select "(selected|unselected)" "(random|<any product name>)" product "(name|image)" -->  Detail tests uncovered a new need in this step. so this new version is needed.
+- I select "(Add To Cart|Remove)" option for "(1|2)" "(selected|unselected)" random products -->  Simple step (no need for page reference since Products page is the only page where you can select random productS)
+-- New version: I select "(Add To Cart|Remove)" option for "(1|2)" "(selected|unselected)" random products at "Products" page -->  -Simple step with page reference because at Your Cart page you can remove products
+- I select "(Shopping Cart|Menu)" option at "Products" page --> Simple step with page reference
+- I see product option is "(Add To Cart|Remove)" for "(selected|all)" products --> Simple step (no need for page reference since Products page is the only page where you can select random productS)
+-- New version: I see product option is "(Add To Cart|Remove)" for "(selected|all)" products at "Products" page --> Simple step
+- I see product option is "(Add To Cart|Remove)" for "last" "selected" product
+-- New version: I see product option is "(Add To Cart|Remove)" for "last" "selected" product at "Products" page --> Simple step
+- I see "(1|2)" badge in shopping cart at "Products" page --> Simple step with page reference
+- I don't see any badge in shopping cart at "Products" page --> Simple step with page reference
+- I see the "(Menu option|product grid)" at "Products" page
+Plus we add a value to the parametrised step. This time is for convenience, since Saucelabs page is not going to be tested
+- I see "(Products|Saucelabs)" page
+
+We also have a new step for login page steps file ...
+- I am "(standard_user|locked_out_user)" user
+- I login with user "(valid|invalid)" password
+- I see "(Products)" page
+- New step: I see "(Login|Locked_Out)" error at Login page- I see "Login" option at "Login" page  --> Simple Step
+
+Following same procedure as with 'I see "Products" page' step for Login steps, we need to also create a new file for Detail page steps
+- I see Detail page for "(selected|<any product name>)" product --> Simple step with product reference
+
+And another one for Your Cart page. Be aware of the parametrised step is the same as I see "Products" page, but with different value
+- I see "Your Cart" page
+
+For this project We have chosen to create a dedicated file also for left menu steps:
+- I see the left menu
+- I select "(All Items|Logout|About|Reset App State|Close)" option at the left menu
+
+
+
+ [PAGE]  DETAIL
+
+ Obviously, to get into Detail page we need to pass through Products page, so we need create commodity complex steps ...
+ 
+ - Buy First
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge created
+Given I select "unselected" random product "name" when logged as "standard_user" user --> Complex step
+When I select "Add To Cart" option at "Detail" page --> Simple step with page reference
+Then I see product option is "Remove" for the Detail's product --> Simple step with page reference for unambiguity
+And I see "1" badge in shopping cart at "Details" page --> Simple step with page reference
+
+ - Buy Not the First
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge updated
+Given I select "Add To Cart" option for "1" "unselected" random products when logged as "standard_user" user --> Complex step
+And I select "unselected" "random" product "image" --> This new step version is needed here for ensuring the Detail's product is not in the cart.
+When I select "Add To Cart" option at "Detail" page --> Simple step with page reference
+Then I see product option is "Remove" for the Detail's product  --> Simple step with page reference for unambiguity
+And I see "2" badge in shopping cart at "Details" page --> Simple step with page reference
+
+ - Remove not the last product
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge updated
+Given I select "Add To Cart" option for "2" "unselected" random products when logged as "standard_user" user --> Complex step
+And I select "selected" "random" product "image" --> This new step version is needed here for ensuring the Detail's product is in the cart.
+When I select "Remove" option at "Detail" page --> Simple step with page reference
+Then I see product option is "Add to Cart" for the Detail's product  --> Simple step with page reference for unambiguity
+And I see "1" badge in shopping cart at "Details" page --> Simple step with page reference
+
+ - Remove last product
+        - L1. CP1: button text changed
+        - L1. CP2: shopping cart icon badge deleted
+Given I select "1" "unselected" random products when logged as "standard_user" user --> Complex step
+And I select "random" "selected" product "image" --> Simple step
+When I select "Remove" option at "Detail" page --> Simple step with page reference
+Then I see product option is "Add to Cart" for the Detail's product  --> Simple step with page reference for unambiguity
+And I don't see any badge in shopping cart at "Details" page --> Simple step with page reference
+
+ - Back to products
+        - L2. CP1: products page title
+        - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+Given I select "unselected" random product "name" when logged as "standard_user" user --> Complex step
+When I select "Back To Products" option at "Detail" page
+Then I see "Products" page  --> Simple Step
+And I see the "Menu option" at "Products" page
+And I see the "products grid" at "Products" page
+
+ - Shopping cart access
+        - L3. CP1: page title
+Given I select "unselected" random product "name" when logged as "standard_user" user --> Complex step
+When I select "Shopping Cart" option at "Detail" page --> Simple step with page reference
+Then I see "Your Cart" page
+
+- Open Burger menu
+        - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+Given I select "unselected" random product "name" when logged as "standard_user" user --> Complex step
+When I select "Menu" option at "Detail" page --> Simple step with page reference
+Then I see the left menu
+
+ - Close Burger menu
+        - L1. CP1: table element invisible 
+        - L1. CP2: Burger menu is visible
+Given I select "unselected" random product "name" when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Detail" page --> Simple step with page reference
+When I select "Close" option at the left menu
+Then I see the "Menu option" at "Detail" page
+
+ - All Items
+        - L2. CP1: products page title
+        - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+Given I select "unselected" random product "name" when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Detail" page --> Simple step with page reference
+When I select "All Items" option at the left menu
+Then I see "Products" page  --> Simple Step
+And I see the "Menu option" at "Products" page
+And I see the "products grid" at "Products" page
+
+ - About SauceLabs
+        - L3. CP1: Saucelabs page title
+Given I select "unselected" random product "name" when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Detail" page --> Simple step with page reference
+When I select "About" option at the left menu
+Then I see "Saucelabs" page  --> Simple Step
+
+ - Logout
+        - L2. CP1: Login button
+Given I select "unselected" random product "name" when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Detail" page --> Simple step with page reference
+When I select "Logout" option at the left menu
+Then I see "Login" option at "Login" page  --> Simple Step
+
+ - Reset
+        - L1. CP1: All products with Add To Cart text
+        - L1. CP2: shopping cart icon with no badge
+Given I select "unselected" random product "name" when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Detail" page --> Simple step with page reference
+When I select "Reset App State" option at the left menu
+Then I don't see any badge in shopping cart at "Detail" page --> Simple step with page reference
+And I see product option is "Add To Cart" for the Detail's product
+ 
+ 
+Wrapping up new steps. 
+Notice the first one in Products page steps and first one in Detail page steps: Bold examples of complex steps: login + navigation in a single step.
+
+Products page steps we have now a mandatory new version for a step and a brand new complex step
+- I am logged into Products page with "standard_user" user --> Complex step
+- I select "(random|<any product name>)" product "(name|image)" --> Simple step (no need for page reference since Products page is the only page where you can select random productS)
+-- New version: I select "(selected|unselected)" "random" product "(image|name)" --> This new step version is needed here for ensuring the Detail's product is not in the cart.
+- I select "(Add To Cart|Remove)" option for "(1|2)" "(selected|unselected)" random products at "Products" page -->  -Simple step with page reference because at Your Cart page you can remove products
+- I select "(Shopping Cart|Menu)" option at "Products" page --> Simple step with page reference
+- New step: I select "Add To Cart" option for "(1|2)" "(selected|unselected)" random products when logged as "standard_user" user --> Complex step
+- I see product option is "(Add To Cart|Remove)" for "(selected|all)" products --> Simple step (no need for page reference since Products page is the only page where you can select random productS)
+- I see product option is "(Add To Cart|Remove)" for "(selected|all)" products at "Products" page --> Simple step
+- I see product option is "(Add To Cart|Remove)" for "last" "selected" product
+- I see product option is "(Add To Cart|Remove)" for "last" "selected" product at "Products" page --> Simple step
+- I see "(1|2)" badge in shopping cart at "Products" page --> Simple step with page reference
+- I don't see any badge in shopping cart at "Products" page --> Simple step with page reference
+- I see the "(Menu option|product grid)" at "Products" page
+- I see "(Products|Saucelabs)" page
+
+Detail page steps
+- I select "(selected|unselected)" random product "(name|image)" when logged as "standard_user" user --> Complex step
+- I select "(Add To Cart|Remove|Back To Products|Shopping Cart|Menu)" option at "Detail" page --> Simple step with page reference
+- I see product option is "(Add To Cart|Remove)" for the Detail's product --> Simple step with page reference for unambiguity
+- I see "(1|2)" badge in shopping cart at "Details" page --> Simple step with page reference. Repeating parametrised step with new values
+- I don't see any badge in shopping cart at "Details" page --> Simple step with page reference
+Plus the step that was created previously
+- I see Detail page for "(selected|<any product name>)" product --> Simple step with product reference
+
+
+So, as we are diving into the third page, just recall the building strategy: simple steps for the current stage (page) for detailed testing, next stage will merge simple steps from previous stages into a single one.
+The trick here is that you usually don't need all the simple steps parameters values combination, usually you just need to follow the happy path or just the values for the parameters that will reach the needed stage (page).
+
+
+ [PAGE]  YOUR CART
+ 
+ - Remove Not Last
+       - L1. CP1: button text changed
+       - L1. CP2: shopping cart icon badge updated
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Remove" option for random Cart product
+Then I don't see "selected" product at "Your Cart" page 
+And I see "(1|2)" badge in shopping cart at "Your Cart" page --> Simple step with page reference. Repeating parametrised step with new values
+
+ - Remove Last
+       - L1. CP1: button text changed
+       - L1. CP2: shopping cart icon badge deleted
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Remove" option for random Cart product
+Then I don't see "any" product at "Your Cart" page
+And I don't see any badge in shopping cart at "Your Cart" page --> Simple step with page reference
+
+ - Checkout access. Enabled with products.
+       - L3. CP1: page title
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Checkout" option at "Your Cart" page
+Then I see "Your Information" page
+
+ - Checkout access. Disabled without products.
+       - L1. CP1: button is disabled
+Given I am logged into Products page with "standard_user" user --> Complex step
+When I select "Shopping Cart" option at "Products" page
+Then I see "Checkout" option is "disabled" at "Your Cart" page
+
+ - Continue Shopping
+       - L2. CP1: page title
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Continue Shopping" option at "Your Cart" page
+Then I see "Products" page
+And I see the "products grid" at "Products" page
+
+ - Shopping cart access
+        - L2. CP1: page title
+        - L2. CP2: it keeps products list
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Shopping Cart" option at "Your Cart" page
+Then I see "Your Cart" page
+Then I see "selected" products at "Your Cart" page
+
+- Open Burger menu
+        - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Menu" option at "Your Cart" page --> Simple step with page reference
+Then I see the left menu
+
+ - Close Burger menu
+        - L1. CP1: table element invisible 
+        - L1. CP2: Burger menu is visible
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Cart" page --> Simple step with page reference
+When I select "Close" option at the left menu
+Then I see the "Menu option" at "Your Cart" page
+
+ - All Items
+        - L2. CP1: products page title
+        - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Cart" page --> Simple step with page reference
+When I select "All Items" option at the left menu
+Then I see "Products" page  --> Simple Step
+And I see the "Menu option" at "Products" page
+And I see the "products grid" at "Products" page
+
+ - About SauceLabs
+        - L3. CP1: Saucelabs page title
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Cart" page --> Simple step with page reference
+When I select "About" option at the left menu
+Then I see "Saucelabs" page  --> Simple Step
+
+ - Logout
+        - L2. CP1: Login button
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Cart" page --> Simple step with page reference
+When I select "Logout" option at the left menu
+Then I see "Login" option at "Login" page  --> Simple Step
+
+ - Reset
+        - L1. CP1: All products with Add To Cart text
+        - L1. CP2: shopping cart icon with no badge
+Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Cart" page --> Simple step with page reference
+When I select "Reset App State" option at the left menu
+Then I don't see any badge in shopping cart at "Your Cart" page --> Simple step with page reference
+And I don't see "any" product at "Your Cart" page
+ 
+
+Wrapping up the new steps:
+Notice the new complex step regarding how to reach advanced pages in the flow by using "proceed". The only info needed is the number of products and the user.
+
+Your Cart page steps:
+- I select "Remove" option for random Cart product --> Simple Step (currently there is no more option than "Remove", by parametrising it, we get ready for future features)
+- I select "(Checkout|Continue Shopping|Shopping Cart|Menu)" option at "Your Cart" page
+- I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+- I don't see "(any|selected)" product at "Your Cart" page
+- I see "(1|2)" badge in shopping cart at "Your Cart" page --> Simple step with page reference. Repeating parametrised step with new values
+- I don't see any badge in shopping cart at "Your Cart" page --> Simple step with page reference
+- I see "Checkout" option is "disabled" at "Your Cart" page
+Plus the step that was created previously
+- I see "Your Cart" page
+Plus the one created because of next page "Your Information"
+- I see "selected" products at "Your Cart" page
+
+
+We need another steps file for Your Information page for new steps:
+- I see "Your Information" page
+
+ 
+ [PAGE] CHECKOUT: YOUR INFORMATION
+ 
+ - Invalid Continue - first name missing
+       - L1. CP1: error banner + configured text
+       - L1. CP2: red font + configured text + X red icon
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I fill "last name" and "zip/postal code"
+When I select "Continue" option at "Your Information" page
+Then I see "first name missing" error at Your Information page
+And I see empty fields placeholder and underline in red font plus an error icon
+And I don't see not-empty fields placeholder and underline in red font plus an error icon
+
+ - Invalid Continue - last name missing
+       - L1. CP1: error banner + configured text
+       - L1. CP2: red font + configured text + X red icon
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I fill "first name" and "zip/postal code"
+When I select "Continue" option at "Your Information" page
+Then I see "last name missing" error at Your Information page
+And I see "last name" placeholder and underline in red font plus an error icon
+And I don't see "first name" and "zip/postal code" placeholder and underline in red font plus an error icon
+
+ - Invalid Continue - zip/postal code missing
+       - L1. CP1: error banner + configured text
+       - L1. CP2: red font + configured text + X red icon
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I fill "first name" and "last name"
+When I select "Continue" option at "Your Information" page
+Then I see "zip/postal code missing" error at Your Information page
+And I see empty fields placeholder and underline in red font plus an error icon
+And I don't see not-empty fields placeholder and underline in red font plus an error icon
+
+ - Invalid Continue - all missing
+       - L1. CP1: error banner + configured text for first missing field
+       - L1. CP2: red font + configured text + X red icon
+Given I proceed to "Your INFORMATION" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I fill no fields at "Your Information" page
+When I select "Continue" option at "Your Information" page
+Then I see "first name missing" error at Your Information page
+And I see empty fields placeholder and underline in red font plus an error icon
+And I don't see not-empty fields placeholder and underline in red font plus an error icon
+
+ - Invalid Continue - only one (random) field is filled 
+       - L1. CP1: error banner + configured text for first missing field
+       - L1. CP2: red font + configured text + X red icon - Valid Continue
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I fill "one random" fields at "Your Information" page
+When I select "Continue" option at "Your Information" page
+Then I see "first empty field missing" error at Your Information page
+And I see empty fields placeholder and underline in red font plus an error icon
+And I don't see not-empty fields placeholder and underline in red font plus an error icon
+
+ - Valid Continue
+       - L3. CP1: page title
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I fill all fields at "Your Information" page
+When I select "Continue" option at "Your Information" page
+Then I see "Overview" page
+
+ - Cancel
+       - L2. CP1: page title
+       - L2. CP2: products list is visible
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I fill all fields at "Your Information" page
+When I select "Cancel" option at "Your Information" page
+Then I see "Your Cart" page
+And I see the "product list" at "Your Cart" page
+
+ - Shopping cart access
+        - L2. CP1: page title
+        - L2. CP2: it keeps products list
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Shopping Cart" option at "Your Cart" page
+Then I see "Your Cart" page
+Then I see "selected" products at "Your Cart" page
+
+ - Open Burger menu
+       - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Menu" option at "Your Information" page --> Simple step with page reference
+Then I see the left menu
+
+ - Close Burger menu
+        - L1. CP1: table element invisible 
+        - L1. CP2: Burger menu is visible
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Information" page --> Simple step with page reference
+When I select "Close" option at the left menu
+Then I see the "Menu option" at "Your Information" page
+
+ - All Items
+        - L2. CP1: products page title
+        - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Information" page --> Simple step with page reference
+When I select "All Items" option at the left menu
+Then I see "Products" page  --> Simple Step
+And I see the "Menu option" at "Products" page
+And I see the "products grid" at "Products" page
+
+ - About SauceLabs
+        - L3. CP1: Saucelabs page title
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Information" page --> Simple step with page reference
+When I select "About" option at the left menu
+Then I see "Saucelabs" page  --> Simple Step
+
+ - Logout
+        - L2. CP1: Login button
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Information" page --> Simple step with page reference
+When I select "Logout" option at the left menu
+Then I see "Login" option at "Login" page  --> Simple Step
+
+ - Reset
+        - L1. CP1: All products with Add To Cart text
+        - L1. CP2: shopping cart icon with no badge
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Information" page --> Simple step with page reference
+When I select "Reset App State" option at the left menu
+Then I don't see any badge in shopping cart at "Your Information" page --> Simple step with page reference
+
+ - Reset And Continue Checkout
+        - L1. CP1: Since there is no shown product at this page, we need to follow the flow one step in order to check the cart is empty.
+Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Your Information" page --> Simple step with page reference
+And I select "Reset App State" option at the left menu
+And I fill all fields at "Your Information" page
+When I select "Continue" option at "Your Information" page
+And I don't see "any" product at "Overview" page
+
+Wrapping up new steps:
+
+Your Information page new steps:
+- I fill "(first name|last name|zip/postal code)" and "(first name|last name|zip/postal code)"
+- I fill "(all|no|one random)" fields at "Your Information" page
+- I select "(Cancel|Continue|Shopping Cart|Menu)" option at "Your Information" page
+- I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user --> Complex step
+- I see "(first name missing|last name missing|zip/postal code missing|first empty field missing)" error at Your Information page
+- I see empty fields placeholder and underline in red font plus an error icon
+- I don't see not-empty fields placeholder and underline in red font plus an error icon
+Plus the step that was created previously
+- I see "Your Information" page
+
+We need another steps file for Overview page new steps:
+- I see "Overview" page
+
+Also new step for Your Cart
+- I see "Your Cart" page
+- I select "Remove" option for random Cart product
+- I select "(Checkout|Continue Shopping|Shopping Cart|Menu)" option at "Your Cart" page
+- I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user --> Complex step
+- I don't see "(any|selected)" product at "Your Cart" page
+- I see "(1|2)" badge in shopping cart at "Your Cart" page --> Simple step with page reference. Repeating parametrised step with new values
+- I don't see any badge in shopping cart at "Your Cart" page --> Simple step with page reference
+- New step: I see the "product list" at "Your Cart" page
+
+
+[PAGE] CHECKOUT: OVERVIEW
+
+- Finish purchase
+       - L3. CP1: page title
+Given I checkout the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Finish" option at "Overview" page
+Then I see "Complete" page
+
+- Cancel
+       - L3. CP1: page title
+Given I checkout the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Cancel" option at "Overview" page
+Then I see "Products" page
+And I see the "products grid" at "Products" page
+
+ - Shopping cart access
+        - L2. CP1: page title
+        - L2. CP2: it keeps products list
+Given I checkout the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Shopping Cart" option at "Your Cart" page
+Then I see "Your Cart" page
+Then I see "selected" products at "Your Cart" page
+
+ - Open Burger menu
+       - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+Given I checkout the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Menu" option at "Overview" page --> Simple step with page reference
+Then I see the left menu
+
+ - Close Burger menu
+        - L1. CP1: table element invisible 
+        - L1. CP2: Burger menu is visible
+Given I checkout the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Overview" page --> Simple step with page reference
+When I select "Close" option at the left menu
+Then I see the "Menu option" at "Overview" page
+
+ - All Items
+        - L2. CP1: products page title
+        - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+Given I checkout the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Overview" page --> Simple step with page reference
+When I select "All Items" option at the left menu
+Then I see "Products" page  --> Simple Step
+And I see the "Menu option" at "Products" page
+And I see the "products grid" at "Products" page
+
+ - About SauceLabs
+        - L3. CP1: Saucelabs page title
+Given I checkout the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Overview" page --> Simple step with page reference
+When I select "About" option at the left menu
+Then I see "Saucelabs" page  --> Simple Step
+
+ - Logout
+        - L2. CP1: Login button
+Given I checkout the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Overview" page --> Simple step with page reference
+When I select "Logout" option at the left menu
+Then I see "Login" option at "Login" page  --> Simple Step
+
+ - Reset
+        - L1. CP1: All products with Add To Cart text
+        - L1. CP2: shopping cart icon with no badge
+Given I checkout the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Overview" page --> Simple step with page reference
+When I select "Reset App State" option at the left menu
+Then I don't see any badge in shopping cart at "Overview" page --> Simple step with page reference
+And I don't see "any" product at "Overview" page
+
+
+Wrapping up new steps:
+Notice we introduce another verb, "checkout", meaning all the way down to clicking checkout button in Your Cart and then inform user name and postal data.
+Maybe it is a risky election, but the team must agree on something straightforward.
+
+Overview page steps:
+- I checkout the purchase with "(1|2)" selected random products when logged as "standard_user" user --> Complex step
+- I select "(Cancel|Finish|Shopping Cart|Menu)" option at "Overview" page
+- I don't see "any" product at "Overview" page
+Plus the step that was created previously
+- I see "Overview" page
+
+We need another steps file for Complete page new steps:
+- I see "Complete" page
+
+
+ [PAGE] CHECKOUT: COMPLETE!
+ 
+- Back Home
+       - L2. CP1: All products with Add To Cart text
+       - L2. CP2: shopping cart icon with no badge
+Given I finish the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Back Home" option at "Complete" page --> Simple step with page reference
+Then I see "Products" page
+And I don't see any badge in shopping cart at "Products" page --> Simple step with page reference
+
+- Shopping cart access
+       - L1. CP1: page title
+       - L1. CP2: no product in the list after finished purchase
+Given I finish the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Shopping Cart" option at "Your Cart" page
+Then I see "Your Cart" page
+Then I don't see "any" product at "Your Cart" page
+
+- Open Burger menu
+       - L1. CP1: table element visible (note: the page itself will be tested on dowstream flow)
+Given I finish the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+When I select "Menu" option at "Complete" page --> Simple step with page reference
+Then I see the left menu
+
+- Close Burger menu
+       - L1. CP1: table element invisible 
+       - L1. CP2: Burger menu is visible
+Given I finish the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Complete" page --> Simple step with page reference
+When I select "Close" option at the left menu
+Then I see the "Menu option" at "Complete" page
+
+- Select All Items
+       - L2. CP1: products page title
+       - L2. CP2: products grid visible (note: this path is finished here, so we add this additional checkpoint)
+Given I finish the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Complete" page --> Simple step with page reference
+When I select "All Items" option at the left menu
+Then I see "Products" page
+And I see the "Menu option" at "Products" page
+And I see the "products grid" at "Products" page
+
+- About SauceLabs
+       - L3. CP1: Saucelabs page title
+Given I finish the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Complete" page --> Simple step with page reference
+When I select "About" option at the left menu
+Then I see "Saucelabs" page  --> Simple Step
+
+- Logout
+       - L2. CP1: Login button
+Given I finish the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+And I select "Menu" option at "Complete" page --> Simple step with page reference
+When I select "Logout" option at the left menu
+Then I see "Login" option at "Login" page  --> Simple Step
+
+- Reset
+       - L1. CP2: shopping cart icon with no badge
+Given I am logged into Products page with "standard_user" user --> Complex step
+And I select "Menu" option at "Products" page --> Simple step with page reference
+When I select "Reset App State" option at the left menu
+Then I don't see any badge in shopping cart at "Complete" page --> Simple step with page reference
+
+
+Wrapping up new steps:
+Notice we introduce another verb, "finish", meaning all the way down to clicking finish button in Overview.
+Maybe it is a risky election, but the team must agree on something straightforward.
+
+Complete page steps:
+- I finish the purchase with "1" selected random products when logged as "standard_user" user --> Complex step
+- I select "(Back Home|Shopping Cart|Menu)" option at "Complete" page
+Plus the step that was created previously
+- I see "Complete" page
+
+
+
+[E2E] 
+
+# Forward
+- Products-Shopping Cart shows purchased products. One product
+       - name
+       - quantity
+       - price
+       - cart badge
+- Products-Shopping Cart shows purchased products. Two product
+       - name
+       - quantity
+       - price
+       - cart badge
+- Product-Detail shows purchased product. Just selected product in Products.
+       - Add to Cart vs Remove
+       - cart badge
+- Product-Detail shows purchased product. None selected product in Products
+       - Add to Cart vs Remove
+       - cart badge
+- Product-Detail shows purchased product. Select another product in Products
+       - Add to Cart vs Remove
+       - cart badge
+- Detail-Shopping Cart shows purchased products. Selected product
+       - name
+       - price
+       - cart badge
+- Detail-Shopping Cart shows purchased products. Just another product
+       - name
+       - price
+       - cart badge
+- Detail-Shopping Cart shows purchased products. Selected product and another one
+       - name
+       - price
+       - cart badge
+- Overview shows purchased products. One product
+       - name
+       - quantity
+       - price
+       - total (item total, tax, total)
+- Overview shows purchased products. Two products
+       - name
+       - quantity
+       - price
+       - total (item total, tax, total)
+- Finished purchase resets shopping cart. Products page
+       - No product with Remove
+       - cart with no badge
+- Finished purchase resets shopping cart. Shopping cart
+       - No product
+
+
+# Backwards
+- Detail's Back to Products keeps purchased products with no cart change
+       - Add to Cart vs Remove
+- Detail's Back to Products keeps purchased products after product is added
+       - Add to Cart vs Remove
+- Detail's Back to Products keeps purchased products after product is removed
+       - Add to Cart vs Remove
+- Cart's Continue Shopping keeps purchased products with no cart changed
+       - Add to Cart vs Remove
+- Cart's Continue Shopping keeps purchased products after product is added
+       - Add to Cart vs Remove
+- Cart's Continue Shopping keeps purchased products after product is removed
+       - Add to Cart vs Remove
+- Your Information's Shopping Cart keeps purchased products
+       - Add to Cart vs Remove
+- Your Information's Cancel keeps purchased products
+       - Add to Cart vs Remove
+- Overview's Shopping Cart keeps purchased products
+       - Add to Cart vs Remove
+- Overview's Cancel keeps purchased products
+       - Add to Cart vs Remove
+- Left Menu's Reset resets shopping cart
+       - Add to Cart vs Remove
+       - cart badge
+
