@@ -1,5 +1,5 @@
 # playwright-playground-cucumber-js
-Playwright with BDD. Cucumber runner
+Playwright with BDD: Cucumber runner
 
 ## Project structure
 
@@ -14,7 +14,16 @@ Playwright with BDD. Cucumber runner
     - setup.js: javascript for initialiting objects (it is first file to be loaded/executed when running the project scripts)
 - package.json: it contains project running scripts as well as needed packages
 
+## Getting ready the environment
+
+After the mandatory install command `npm install` you need to download the playwright browsers.
+
+Please do that with this command: `npx playwright install` 
+
+
 ## Running the project
+
+You can run the project by executing `npm run <option>` with one of this options
 
 ```
     "test": "./node_modules/.bin/cucumber-js --require tests --publish-quiet",
