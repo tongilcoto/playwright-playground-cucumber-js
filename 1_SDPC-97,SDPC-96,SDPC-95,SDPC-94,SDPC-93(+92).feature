@@ -431,7 +431,7 @@ Feature: All tests. March 2023
 		Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user
 		When I select "Shopping Cart" option at "Your Cart" page
 		Then I see "Your Cart" page
-		Then I see "selected" products at "Your Cart" page
+		And I see "selected" products at "Your Cart" page
 	@TEST_SDPC-32 @TESTSET_SDPC-101 @TESTSET_SDPC-106 @YourCart @page
 	Scenario: Removing Not the Last cart product in Your Cart page updates the shopping cart and the product status
 		Given I proceed to "Your Cart" page with "2" selected random products when logged as "standard_user" user
