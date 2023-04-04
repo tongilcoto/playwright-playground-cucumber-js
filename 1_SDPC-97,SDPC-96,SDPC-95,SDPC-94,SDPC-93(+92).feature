@@ -622,7 +622,7 @@ Feature: All tests. March 2023
 	Scenario: Shopping cart access from Products page
 		Given I am logged into Products page with "standard_user" user
 		When I select "Shopping Cart" option at "Products" page
-		Then I see "Your Cart" page
+		Then I see "Your Cart" page		
 	@TEST_SDPC-1 @TESTSET_SDPC-99 @TESTSET_SDPC-106 @Products @page
 	Scenario: Selecting 1 product in Products page updates the shopping cart and the product status
 		Given I am logged into Products page with "standard_user" user
