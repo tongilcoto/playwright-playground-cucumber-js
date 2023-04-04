@@ -20,7 +20,7 @@ class productsPage {
         return page.locator(this.selectors.productCell, {has: page.locator(this.selectors.options[option])});
     }
 
-    getProductByTitle(text) {
+    getProductByName(text) {
         return page.locator(this.selectors.productCell, {hasText: text});
     }
 
