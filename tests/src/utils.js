@@ -11,7 +11,7 @@ function getNotRepeatedRandomList(numberOfItemsToSelect, totalNumberOfItems) {
 async function selectMultipleProducts(indexesSet, products, option) {
     for (const index of indexesSet) {
         const productText = await products.nth(index).innerText(); 
-        const product = await global.productsPage.getProductByName(productText.split('\n')[0]);
+        const product = await global.productsPage.getProductByName(global.page, productText.split('\n')[0]);
         await global.productsPage.selectOption(product, option);
         global.productsStatus[option === 'Add To Cart' ? 'selected' : 'unselected'].push(productText.split('\n')[0]);
     }
@@ -25,7 +25,7 @@ function getProductAtPosition(position, status) {
 }
 
 async function validateProductShoppingCartOption(name, expectedOption) {
-    const webProduct = await global.productsPage.getProductByName(name);
+    const webProduct = await global.productsPage.getProductByName(global.page, name);
     const optionRegexp = expectedOption === 'Add To Cart'? /^add-to-cart-/ : /^remove/;
     await expect(global.productsPage.getProductCartOption(webProduct, expectedOption)).toHaveAttribute('data-test', optionRegexp);
 }

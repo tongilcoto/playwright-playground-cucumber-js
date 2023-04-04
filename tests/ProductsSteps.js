@@ -15,8 +15,9 @@ When(/^I select "(Add To Cart|Remove)" option for "(\d)" "(selected|unselected)"
     await selectMultipleProducts(productsToSelectIndexes, products, option);
 });
 
-Then(/^I see product option is "(Add To Cart|Remove)" for "(selected|unselected)" products at "(Products)" page$/, async function(option, status, page) {
-    for (const productName of global.productsStatus[status]) {
+Then(/^I see product option is "(Add To Cart|Remove)" for "(selected|unselected|all)" products at "(Products)" page$/, async function(option, status, page) {
+    const stepProducts = status === 'all'? await global.productsPage.getAllProductNames(global.page) : global.productsStatus[status];
+    for (const productName of stepProducts) {
         await validateProductShoppingCartOption(productName, option);
     }
 });
@@ -27,4 +28,8 @@ Then(/^I see product option is "(Add To Cart|Remove)" for "(last)" "(selected|un
 
 Then(/^I see "(\d)" badge in shopping cart at "(Products)" page$/, async function(badgeValue, page) {
     expect(await global.productsPage.getShoppingCartBadgeValue(global.page)).toBe(badgeValue);
+});
+
+Then(/^I don't see any badge in shopping cart at "(Products)" page$/, async function(page) {
+    await expect(global.productsPage.getShoppingCartBadge(global.page)).toHaveCount(0);
 });
