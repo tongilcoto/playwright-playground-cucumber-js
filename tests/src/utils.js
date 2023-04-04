@@ -25,7 +25,7 @@ async function getProductForIndex(products, index) {
 async function selectMultipleProducts(indexesSet, products, option) {
     for (const index of indexesSet) {
         const {product, productText} = await getProductForIndex(products, index);
-        await global.productsPage.selectOption(product, option);
+        await global.productsPage.selectProductOption(product, option);
         global.productsStatus[option === shoppingCartOptions.ADDTOCART ? productStatuses.SELECTED : productStatuses.UNSELECTED].push(productText.split('\n')[0]);
     }
 }

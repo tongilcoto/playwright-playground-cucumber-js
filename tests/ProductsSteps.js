@@ -41,6 +41,10 @@ When(/^I select "(unselected)" "(random)" product "(image|name)"$/, async functi
         ({products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, 1));
         ({product, productText} = await getProductForIndex(products, Array.from(productsToSelectIndexes)[0]));
     }
-    await global.productsPage.selectOption(product, component);
+    await global.productsPage.selectProductOption(product, component);
     [global.detailProduct.name, global.detailProduct.description, global.detailProduct.price] = productText.split('\n');
+});
+
+When(/^I select "(Shopping Cart)" option at "(Products)" page$/, async function(option, page) {
+    await global.productsPage.selectPageOption(global.page, option);
 });

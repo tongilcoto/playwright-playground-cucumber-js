@@ -13,3 +13,6 @@ global.productsPage = new productsPage();
 const detailPage = require('./src/model/detailPage.js');
 global.detailPage = new detailPage();
 
+const shoppingCartPage = require('./src/model/shoppingCartPage.js');
+global.shoppingCartPage = new shoppingCartPage();
+
