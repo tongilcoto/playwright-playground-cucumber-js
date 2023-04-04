@@ -1,5 +1,5 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {language, pageUrls, passwords} = require('./src/constants.js');
+const {shoppingCartOptions, productStatuses} = require('./src/constants.js');
 const {getNotRepeatedRandomList, selectMultipleProducts, getProductAtPosition, validateProductShoppingCartOption} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
@@ -9,14 +9,14 @@ Then(/^I see "(Products)" page$/, {timeout: 10000}, async function(pageTitle) {
 });
 
 When(/^I select "(Add To Cart|Remove)" option for "(\d)" "(selected|unselected)" random products at "(Products)" page$/, async function(option, quantity, status, page) {
-    const products = await global.productsPage.getListOfProductsFor(global.page, status === 'selected' ? "remove" :"addToCart");
+    const products = await global.productsPage.getListOfProductsFor(global.page, status === productStatuses.SELECTED ? shoppingCartOptions.REMOVE : shoppingCartOptions.ADDTOCART);
     const numberOfProducts = await products.count();
     const productsToSelectIndexes = getNotRepeatedRandomList(quantity, numberOfProducts);
     await selectMultipleProducts(productsToSelectIndexes, products, option);
 });
 
 Then(/^I see product option is "(Add To Cart|Remove)" for "(selected|unselected|all)" products at "(Products)" page$/, async function(option, status, page) {
-    const stepProducts = status === 'all'? await global.productsPage.getAllProductNames(global.page) : global.productsStatus[status];
+    const stepProducts = status === productStatuses.ALL? await global.productsPage.getAllProductNames(global.page) : global.productsStatus[status];
     for (const productName of stepProducts) {
         await validateProductShoppingCartOption(productName, option);
     }
