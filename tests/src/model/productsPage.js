@@ -8,15 +8,15 @@ class productsPage {
     }
 
     getProductOption(webElement, option) {
-        return webElement.locator(this.selectors.options[option]);
+        return webElement.locator(this.selectors.productOptions[option]);
     }
 
-    async selectOption(webElement, option) {
+    async selectProductOption(webElement, option) {
         await this.getProductOption(webElement, option).click();
     }
 
     getListOfProductsFor(page, option) {
-        return page.locator(this.selectors.productCell, {has: page.locator(this.selectors.options[option])});
+        return page.locator(this.selectors.productCell, {has: page.locator(this.selectors.productOptions[option])});
     }
 
     getProductByName(page, text) {
@@ -24,7 +24,7 @@ class productsPage {
     }
 
     async getAllProductNames(page) {
-        return await page.locator(this.selectors.productName).allTextContents();
+        return await page.locator(this.selectors.productOptions.name).allTextContents();
     }
 
     async getShoppingCartBadgeValue(page) {
@@ -33,6 +33,10 @@ class productsPage {
 
     getShoppingCartBadge(page) {
         return page.locator(this.selectors.shoppingCartBadgeValue);
+    }
+
+    async selectPageOption(page, option) {
+        await page.locator(this.selectors.pageOptions[option]).click();
     }
 
 };

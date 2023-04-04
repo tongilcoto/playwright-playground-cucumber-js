@@ -57,8 +57,9 @@ I continue with SDPC-17, finishing tests for shopping cart behaviour. This time 
 
 Now I continue with last products management tests before entering left menu ones: Detail and Shopping Cart pages access.
 
-I start with Detail page access. There are two tests: SDPC-10 and SDPC-13. They need both Then and When new steps. The only difference between the tests is just a step paremeter value
+I start with Detail page access. There are two tests: SDPC-10 and SDPC-13. They need both new `When` and `Then` steps. The only difference between the tests is just a step paremeter value
 
 It involves also 3 new files for dealing with Detail page: the steps file, the model file and the selectors file
 
+We need also to implement the Shopping Cart test SDPC-2. Again we need the new `When` and `Then` steps and also create the 3 new files for Shopping Cart page
 
