@@ -616,7 +616,7 @@ Feature: All tests. March 2023
 		Given I am logged into Products page with "standard_user" user
 		And I select "Add To Cart" option for "2" "unselected" random products at "Products" page
 		When I select "Remove" option for "1" "selected" random products at "Products" page
-		Then I see product option is "Add To Cart" for "last" "selected" product at "Products" page
+		Then I see product option is "Add To Cart" for "last" "unselected" product at "Products" page
 		And I see "1" badge in shopping cart at "Products" page
 	@TEST_SDPC-2 @TESTSET_SDPC-99 @TESTSET_SDPC-106 @Products @page
 	Scenario: Shopping cart access from Products page

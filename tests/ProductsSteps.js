@@ -1,6 +1,6 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
 const {language, pageUrls, passwords} = require('./src/constants.js');
-const {getNotRepeatedRandomList, selectMultipleProducts} = require('./src/utils.js');
+const {getNotRepeatedRandomList, selectMultipleProducts, getProductAtPosition, validateProductShoppingCartOption} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 
@@ -17,10 +17,12 @@ When(/^I select "(Add To Cart|Remove)" option for "(\d)" "(selected|unselected)"
 
 Then(/^I see product option is "(Add To Cart|Remove)" for "(selected|unselected)" products at "(Products)" page$/, async function(option, status, page) {
     for (const productName of global.productsStatus[status]) {
-        const webProduct = await global.productsPage.getProductByTitle(productName);
-        const optionRegexp = option === 'Add To Cart'? /^add-to-cart-/ : /^remove/;
-        await expect(global.productsPage.getProductCartOption(webProduct, option)).toHaveAttribute('data-test', optionRegexp);
+        await validateProductShoppingCartOption(productName, option);
     }
+});
+
+Then(/^I see product option is "(Add To Cart|Remove)" for "(last)" "(selected|unselected)" product at "(Products)" page$/, async function(option, position, status, page) {
+    await validateProductShoppingCartOption(getProductAtPosition(position, status), option);
 });
 
 Then(/^I see "(\d)" badge in shopping cart at "(Products)" page$/, async function(badgeValue, page) {
