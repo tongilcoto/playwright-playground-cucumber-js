@@ -7,8 +7,7 @@ class productsPage {
         return page.locator(this.selectors.title);
     }
 
-    getProductCartOption(webElement, rawOption) {
-        const option = rawOption.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+    getProductCartOption(webElement, option) {
         return webElement.locator(this.selectors.options[option]);
     }
 
