@@ -9,10 +9,22 @@ function getNotRepeatedRandomList(numberOfItemsToSelect, totalNumberOfItems) {
     return set;
 }
 
+async function getProductsAndRandomIndexesFor(status, quantity) {
+    const products = await global.productsPage.getListOfProductsFor(global.page, status === productStatuses.SELECTED ? shoppingCartOptions.REMOVE : shoppingCartOptions.ADDTOCART);
+    const numberOfProducts = await products.count();
+    const productsToSelectIndexes = getNotRepeatedRandomList(quantity, numberOfProducts);
+    return {products, productsToSelectIndexes}
+}
+
+async function getProductForIndex(products, index) {
+    const productText = await products.nth(index).innerText(); 
+    const product = global.productsPage.getProductByName(global.page, productText.split('\n')[0]);
+    return {product, productText};
+}
+
 async function selectMultipleProducts(indexesSet, products, option) {
     for (const index of indexesSet) {
-        const productText = await products.nth(index).innerText(); 
-        const product = await global.productsPage.getProductByName(global.page, productText.split('\n')[0]);
+        const {product, productText} = await getProductForIndex(products, index);
         await global.productsPage.selectOption(product, option);
         global.productsStatus[option === shoppingCartOptions.ADDTOCART ? productStatuses.SELECTED : productStatuses.UNSELECTED].push(productText.split('\n')[0]);
     }
@@ -28,12 +40,14 @@ function getProductAtPosition(productPosition, status) {
 async function validateProductShoppingCartOption(name, expectedOption) {
     const webProduct = await global.productsPage.getProductByName(global.page, name);
     const optionRegexp = expectedOption === shoppingCartOptions.ADDTOCART ? shoppingCartElementsRegexp.ADDTOCART : shoppingCartElementsRegexp.REMOVE;
-    await expect(global.productsPage.getProductCartOption(webProduct, expectedOption)).toHaveAttribute(PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, optionRegexp);
+    await expect(global.productsPage.getProductOption(webProduct, expectedOption)).toHaveAttribute(PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, optionRegexp);
 }
 
 module.exports = {
     getNotRepeatedRandomList,
     selectMultipleProducts,
     getProductAtPosition,
-    validateProductShoppingCartOption
+    validateProductShoppingCartOption,
+    getProductsAndRandomIndexesFor,
+    getProductForIndex
 };

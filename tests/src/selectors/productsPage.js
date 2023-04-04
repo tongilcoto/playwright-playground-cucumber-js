@@ -4,6 +4,8 @@ exports.productCell = '.inventory_item';
 exports.productName = '.inventory_item_name'
 exports.options = {
     "Add To Cart": '[data-test^="add-to-cart-"]',
-    "Remove": '[data-test^="remove-"]'
+    "Remove": '[data-test^="remove-"]',
+    "image": 'img.inventory_item_img',
+    "name": this.productName
 };
 exports.shoppingCartBadgeValue = '.shopping_cart_badge';

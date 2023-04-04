@@ -7,12 +7,12 @@ class productsPage {
         return page.locator(this.selectors.title);
     }
 
-    getProductCartOption(webElement, option) {
+    getProductOption(webElement, option) {
         return webElement.locator(this.selectors.options[option]);
     }
 
-    async selectOption(webElement, rawOption) {
-        await this.getProductCartOption(webElement, rawOption).click();
+    async selectOption(webElement, option) {
+        await this.getProductOption(webElement, option).click();
     }
 
     getListOfProductsFor(page, option) {
