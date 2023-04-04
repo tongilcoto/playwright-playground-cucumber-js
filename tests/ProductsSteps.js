@@ -1,6 +1,6 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {shoppingCartOptions, productStatuses} = require('./src/constants.js');
-const {getNotRepeatedRandomList, selectMultipleProducts, getProductAtPosition, validateProductShoppingCartOption} = require('./src/utils.js');
+const {productStatuses, RANDOM} = require('./src/constants.js');
+const {selectMultipleProducts, getProductAtPosition, validateProductShoppingCartOption, getProductsAndRandomIndexesFor, getProductForIndex} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 
@@ -9,9 +9,7 @@ Then(/^I see "(Products)" page$/, {timeout: 10000}, async function(pageTitle) {
 });
 
 When(/^I select "(Add To Cart|Remove)" option for "(\d)" "(selected|unselected)" random products at "(Products)" page$/, async function(option, quantity, status, page) {
-    const products = await global.productsPage.getListOfProductsFor(global.page, status === productStatuses.SELECTED ? shoppingCartOptions.REMOVE : shoppingCartOptions.ADDTOCART);
-    const numberOfProducts = await products.count();
-    const productsToSelectIndexes = getNotRepeatedRandomList(quantity, numberOfProducts);
+    const {products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, quantity);
     await selectMultipleProducts(productsToSelectIndexes, products, option);
 });
 
@@ -32,4 +30,17 @@ Then(/^I see "(\d)" badge in shopping cart at "(Products)" page$/, async functio
 
 Then(/^I don't see any badge in shopping cart at "(Products)" page$/, async function(page) {
     await expect(global.productsPage.getShoppingCartBadge(global.page)).toHaveCount(0);
+});
+
+When(/^I select "(unselected)" "(random)" product "(image|name)"$/, async function(status, option, component) {
+    var products = [];
+    var productsToSelectIndexes = new Set();
+    var product = '';
+    var productText = '';
+    if (option === RANDOM) {
+        ({products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, 1));
+        ({product, productText} = await getProductForIndex(products, Array.from(productsToSelectIndexes)[0]));
+    }
+    await global.productsPage.selectOption(product, component);
+    [global.detailProduct.name, global.detailProduct.description, global.detailProduct.price] = productText.split('\n');
 });
