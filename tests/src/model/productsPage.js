@@ -20,12 +20,20 @@ class productsPage {
         return page.locator(this.selectors.productCell, {has: page.locator(this.selectors.options[option])});
     }
 
-    getProductByName(text) {
+    getProductByName(page, text) {
         return page.locator(this.selectors.productCell, {hasText: text});
+    }
+
+    async getAllProductNames(page) {
+        return await page.locator(this.selectors.productName).allTextContents();
     }
 
     async getShoppingCartBadgeValue(page) {
         return await page.locator(this.selectors.shoppingCartBadgeValue).textContent();
+    }
+
+    getShoppingCartBadge(page) {
+        return page.locator(this.selectors.shoppingCartBadgeValue);
     }
 
 };

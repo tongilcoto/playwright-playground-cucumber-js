@@ -30,3 +30,29 @@ Second test is SDPC-3, remove not the last selected product. SDPC-3. Only one st
 
 Only some improvements are needed alonside with a refactor for the for loop at assertion step
 
+I continue with SDPC-17, finishing tests for shopping cart behaviour. This time again only 1 steps is new plus a new paremeter for an existing one
+
+````
+   ✔ Given I am logged into Products page with "standard_user" user # tests/LoginSteps.js:19
+   ✔ And I select "Add To Cart" option for "1" "unselected" random products at "Products" page # tests/ProductsSteps.js:11
+   ✔ When I select "Remove" option for "1" "selected" random products at "Products" page # tests/ProductsSteps.js:11
+   ? Then I see product option is "Add To Cart" for "all" products at "Products" page
+       Undefined. Implement with the following snippet:
+       
+         Then('I see product option is {string} for {string} products at {string} page', function (string, string2, string3) {
+           // Write code here that turns the phrase above into concrete actions
+           return 'pending';
+         });
+       
+   ? And I don't see any badge in shopping cart at "Products" page
+       Undefined. Implement with the following snippet:
+       
+         Then('I don\'t see any badge in shopping cart at {string} page', function (string) {
+           // Write code here that turns the phrase above into concrete actions
+           return 'pending';
+         });
+       
+   ✔ After # tests/hooks.js:12
+````
+
+
