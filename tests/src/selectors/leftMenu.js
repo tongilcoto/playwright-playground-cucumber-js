@@ -1,6 +1,7 @@
 exports.leftMenu = '.bm-menu'
 exports.options = {
-    "Reset App State": '#reset_sidebar_link',
+    "About": '#about_sidebar_link',
     "Close": '#react-burger-cross-btn',
-    "Logout": '#logout_sidebar_link'
+    "Logout": '#logout_sidebar_link',
+    "Reset App State": '#reset_sidebar_link'
 }
