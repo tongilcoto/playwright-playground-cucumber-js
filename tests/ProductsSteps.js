@@ -1,8 +1,12 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
 const {productStatuses, RANDOM} = require('./src/constants.js');
-const {selectMultipleProducts, getProductAtPosition, validateProductShoppingCartOption, getProductsAndRandomIndexesFor, getProductForIndex} = require('./src/utils.js');
+const {selectMultipleProducts, getProductAtPosition, validateProductShoppingCartOption, getProductsAndRandomIndexesFor, getProductForIndex, validLogin, selectStepRequiredProducts} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
+Given(/^I select "(Add To Cart)" option for "(\d)" "(unselected)" random products when logged as "(standard_user)" user$/, async function(option, quantity, status, user) {
+    await validLogin(user);
+    await selectStepRequiredProducts(option, quantity, status);
+});
 
 Then(/^I see "(Products)" page$/, {timeout: 10000}, async function(pageTitle) {
     await expect(global.productsPage.getTitleElement(global.page)).toHaveText(pageTitle);

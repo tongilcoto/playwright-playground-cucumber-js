@@ -596,7 +596,7 @@ Feature: All tests. March 2023
 		Then I see "Locked_Out" error at Login page
 	@TEST_SDPC-5 @TESTSET_SDPC-99 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @Products @page
 	Scenario: Reset App State left menu option in Products page resets Shopping Cart and products status
-		Given I am logged into Products page with "standard_user" user
+		Given I select "Add To Cart" option for "1" "unselected" random products when logged as "standard_user" user
 		And I select "Menu" option at "Products" page
 		When I select "Reset App State" option at the left menu
 		Then I don't see any badge in shopping cart at "Products" page

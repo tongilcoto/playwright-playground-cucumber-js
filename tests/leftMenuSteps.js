@@ -19,3 +19,7 @@ When(/^I see the left menu$/, async function() {
     await global.leftMenu.getLeftMenu(global.page).waitFor('hidden');
 
 });
+
+When(/^I select "(Reset App State)" option at the left menu$/, async function(option) {
+    await global.leftMenu.selectOption(global.page, option);
+});
