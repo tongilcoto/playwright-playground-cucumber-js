@@ -54,11 +54,10 @@ When(/^I select "(Shopping Cart|Menu)" option at "Products" page$/, async functi
 });
 
 Then(/^I see "(Menu)" option at "Products" page$/, async function(option) {
-    //await expect(global.productsPage.getPageOption(global.page, option)).toBeVisible();
-    expect(await global.productsPage.getPageOption(global.page, option).isVisible()).toEqual('"Menu" option is hidden but Playwright does not detect it ... grrrr');
+    await expect(global.productsPage.getPageOption(global.page, option)).toBeVisible();
 });
 
 Then(/^I see the "products grid" at "Products" page$/, async function() {
     //await expect(global.productsPage.getProductsGrid(global.page)).toBeVisible();
-    expect(await global.productsPage.getProductsGrid(global.page).isVisible()).toEqual('"Products Grid" is partialy hidden but Playwright does not detect it ... grrrr');
+    expect(await global.productsPage.getProductsGrid(global.page).isVisible()).toEqual('"Reset App State" from Product page keeps "Products Grid" partialy hidden and "Menu" option too but Playwright does not detect it ... grrrr');
 });
