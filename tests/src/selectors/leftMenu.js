@@ -1,0 +1,1 @@
+exports.leftMenu = '.bm-menu'

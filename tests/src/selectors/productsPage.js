@@ -8,6 +8,7 @@ exports.productOptions = {
     "name": '.inventory_item_name'
 };
 exports.pageOptions = {
-    "Shopping Cart": '.shopping_cart_link'
+    "Shopping Cart": '.shopping_cart_link',
+    "Menu": '#react-burger-menu-btn'
 }
 exports.shoppingCartBadgeValue = '.shopping_cart_badge';
