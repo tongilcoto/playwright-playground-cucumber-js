@@ -9,11 +9,15 @@ class loginPage {
 
     async loginWithCredentials(page, user, password) {
         await this.informCredentials(page, user, password);
-        await page.locator(this.selectors.optionLogin).click()
+        await page.locator(this.selectors.options.Login).click()
     }
 
     getLoginErrorElement(page) {
         return page.locator(this.selectors.loginError);
+    }
+
+    getOption(page, option) {
+        return page.locator(this.selectors.options[option]);
     }
 };
 
