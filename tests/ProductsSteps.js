@@ -12,27 +12,27 @@ Then(/^I see "(Products)" page$/, {timeout: 10000}, async function(pageTitle) {
     await expect(global.productsPage.getTitleElement(global.page)).toHaveText(pageTitle);
 });
 
-When(/^I select "(Add To Cart|Remove)" option for "(\d)" "(selected|unselected)" random products at "(Products)" page$/, async function(option, quantity, status, page) {
+When(/^I select "(Add To Cart|Remove)" option for "(\d)" "(selected|unselected)" random products at "Products" page$/, async function(option, quantity, status) {
     const {products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, quantity);
     await selectMultipleProducts(productsToSelectIndexes, products, option);
 });
 
-Then(/^I see product option is "(Add To Cart|Remove)" for "(selected|unselected|all)" products at "(Products)" page$/, async function(option, status, page) {
+Then(/^I see product option is "(Add To Cart|Remove)" for "(selected|unselected|all)" products at "Products" page$/, async function(option, status) {
     const stepProducts = status === productStatuses.ALL? await global.productsPage.getAllProductNames(global.page) : global.productsStatus[status];
     for (const productName of stepProducts) {
         await validateProductShoppingCartOption(productName, option);
     }
 });
 
-Then(/^I see product option is "(Add To Cart|Remove)" for "(last)" "(selected|unselected)" product at "(Products)" page$/, async function(option, position, status, page) {
+Then(/^I see product option is "(Add To Cart|Remove)" for "(last)" "(selected|unselected)" product at "Products" page$/, async function(option, position, status) {
     await validateProductShoppingCartOption(getProductAtPosition(position, status), option);
 });
 
-Then(/^I see "(\d)" badge in shopping cart at "(Products)" page$/, async function(badgeValue, page) {
+Then(/^I see "(\d)" badge in shopping cart at "Products" page$/, async function(badgeValue) {
     expect(await global.productsPage.getShoppingCartBadgeValue(global.page)).toBe(badgeValue);
 });
 
-Then(/^I don't see any badge in shopping cart at "(Products)" page$/, async function(page) {
+Then(/^I don't see any badge in shopping cart at "Products" page$/, async function() {
     await expect(global.productsPage.getShoppingCartBadge(global.page)).toHaveCount(0);
 });
 
@@ -49,10 +49,16 @@ When(/^I select "(unselected)" "(random)" product "(image|name)"$/, async functi
     [global.detailProduct.name, global.detailProduct.description, global.detailProduct.price] = productText.split('\n');
 });
 
-When(/^I select "(Shopping Cart|Menu)" option at "(Products)" page$/, async function(option, page) {
+When(/^I select "(Shopping Cart|Menu)" option at "Products" page$/, async function(option) {
     await global.productsPage.selectPageOption(global.page, option);
 });
 
-Then(/^I see "(Menu)" option at "(Products)" page$/, async function(option, page) {
-    await expect(global.productsPage.getPageOption(global.page, option)).toBeVisible();
+Then(/^I see "(Menu)" option at "Products" page$/, async function(option) {
+    //await expect(global.productsPage.getPageOption(global.page, option)).toBeVisible();
+    expect(await global.productsPage.getPageOption(global.page, option).isVisible()).toEqual('"Menu" option is hidden but Playwright does not detect it ... grrrr');
+});
+
+Then(/^I see the "products grid" at "Products" page$/, async function() {
+    //await expect(global.productsPage.getProductsGrid(global.page)).toBeVisible();
+    expect(await global.productsPage.getProductsGrid(global.page).isVisible()).toEqual('"Products Grid" is partialy hidden but Playwright does not detect it ... grrrr');
 });
