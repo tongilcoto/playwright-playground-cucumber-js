@@ -33,6 +33,8 @@ exports.productStatuses = {
 
 exports.RANDOM = 'random';
 
+exports.SAUCELABS_TITLE = 'Sauce Labs: Cross Browser Testing, Selenium Testing & Mobile Testing';
+
 exports.shoppingCartElementsRegexp = {
     ADDTOCART: /^add-to-cart-/,
     REMOVE: /^remove-/
