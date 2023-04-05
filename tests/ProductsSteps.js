@@ -52,3 +52,7 @@ When(/^I select "(unselected)" "(random)" product "(image|name)"$/, async functi
 When(/^I select "(Shopping Cart|Menu)" option at "(Products)" page$/, async function(option, page) {
     await global.productsPage.selectPageOption(global.page, option);
 });
+
+Then(/^I see "(Menu)" option at "(Products)" page$/, async function(option, page) {
+    await expect(global.productsPage.getPageOption(global.page, option)).toBeVisible();
+});
