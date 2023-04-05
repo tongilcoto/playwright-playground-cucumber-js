@@ -45,6 +45,6 @@ When(/^I select "(unselected)" "(random)" product "(image|name)"$/, async functi
     [global.detailProduct.name, global.detailProduct.description, global.detailProduct.price] = productText.split('\n');
 });
 
-When(/^I select "(Shopping Cart)" option at "(Products)" page$/, async function(option, page) {
+When(/^I select "(Shopping Cart|Menu)" option at "(Products)" page$/, async function(option, page) {
     await global.productsPage.selectPageOption(global.page, option);
 });
