@@ -63,7 +63,8 @@ It involves also 3 new files for dealing with Detail page: the steps file, the m
 
 We need also to implement the Shopping Cart test SDPC-2. Again we need the new `When` and `Then` steps and also create the 3 new files for Shopping Cart page
 
-Finally we get into the last bunch of tests, the ones regarding the Left Menu: SDPC-5,7,8,9,11,16,23
+Finally we get into the last bunch of tests, the ones regarding the Left Menu: SDPC-7,5,8,9,11,16,23
 
-Since it is a common element for all pages, I create a new trio of new files for it (steps, model and selector)
+Since it is a common element for all pages, I create a new trio of new files for it (steps, model and selector) for the first test
 
+I go test by test. For second test, I refactor current steps code for getting it externalized to be used by complex steps

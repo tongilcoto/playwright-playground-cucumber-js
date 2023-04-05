@@ -1,5 +1,16 @@
 const {expect} = require('@playwright/test');
-const {shoppingCartOptions, shoppingCartElementsRegexp, productStatuses, PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, position} = require('./constants.js');
+const {pageUrls, passwords, shoppingCartOptions, shoppingCartElementsRegexp, productStatuses, PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, position} = require('./constants.js');
+
+async function validLogin(user) {
+    global.user = user;
+    await global.page.goto(pageUrls['login']);
+    await global.loginPage.loginWithCredentials(global.page, global.user, passwords["valid"]);
+} 
+
+async function selectStepRequiredProducts(option, quantity, status) {
+    const {products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, quantity);
+    await selectMultipleProducts(productsToSelectIndexes, products, option);
+}
 
 function getNotRepeatedRandomList(numberOfItemsToSelect, totalNumberOfItems) {
     const set = new Set()
@@ -49,5 +60,7 @@ module.exports = {
     getProductAtPosition,
     validateProductShoppingCartOption,
     getProductsAndRandomIndexesFor,
-    getProductForIndex
+    getProductForIndex,
+    validLogin,
+    selectStepRequiredProducts
 };
