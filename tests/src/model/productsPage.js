@@ -35,8 +35,12 @@ class productsPage {
         return page.locator(this.selectors.shoppingCartBadgeValue);
     }
 
+    getPageOption(page, option) {
+        return page.locator(this.selectors.pageOptions[option]);
+    }
+
     async selectPageOption(page, option) {
-        await page.locator(this.selectors.pageOptions[option]).click();
+        await this.getPageOption(page, option).click();
     }
 
 };

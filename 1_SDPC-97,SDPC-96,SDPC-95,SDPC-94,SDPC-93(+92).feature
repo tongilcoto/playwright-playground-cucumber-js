@@ -583,7 +583,7 @@ Feature: All tests. March 2023
 		Given I am logged into Products page with "standard_user" user
 		And I select "Menu" option at "Products" page
 		When I select "Close" option at the left menu
-		Then I see the "Menu option" at "Products" page
+		Then I see "Menu" option at "Products" page
 	@TEST_SDPC-7 @TESTSET_SDPC-99 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @Products @page
 	Scenario: Open Burger menu in Products page opens left menu
 		Given I am logged into Products page with "standard_user" user
