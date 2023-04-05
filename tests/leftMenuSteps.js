@@ -1,4 +1,5 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
+const {SAUCELABS_TITLE} = require('./src/constants.js');
 const {expect} = require('@playwright/test');
 
 
@@ -20,6 +21,11 @@ When(/^I see the left menu$/, async function() {
 
 });
 
-When(/^I select "(All Items|Close|Logout|Reset App State)" option at the left menu$/, async function(option) {
+When(/^I select "(About|All Items|Close|Logout|Reset App State)" option at the left menu$/, async function(option) {
     await global.leftMenu.selectOption(global.page, option);
+});
+
+Then(/^I see "Saucelabs" page$/, async function() {
+    console.log('[src="/images/logo.svg"]')
+    expect(await global.page.title()).toEqual(SAUCELABS_TITLE)
 });

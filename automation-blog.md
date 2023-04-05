@@ -75,3 +75,4 @@ Some steps have the page as step parameter, this way it counts as only 1 step, b
 - I see "Menu" option at "Products" page 
 - I see "Login" option at "Login" page
 
+In this case there is an option that opens another website, Saucelabs. I only dedicate one test for this option and instead of create a trio of new files, I have just added one step into Left Menu steps file.
