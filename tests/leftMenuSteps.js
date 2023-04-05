@@ -21,7 +21,7 @@ When(/^I see the left menu$/, async function() {
 
 });
 
-When(/^I select "(About|Close|Logout|Reset App State)" option at the left menu$/, async function(option) {
+When(/^I select "(About|All Items|Close|Logout|Reset App State)" option at the left menu$/, async function(option) {
     await global.leftMenu.selectOption(global.page, option);
 });
 

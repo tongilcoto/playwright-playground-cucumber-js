@@ -15,6 +15,10 @@ class productsPage {
         await this.getProductOption(webElement, option).click();
     }
 
+    getProductsGrid(page) {
+        return page.locator(this.selectors.productsGrid);
+    }
+
     getListOfProductsFor(page, option) {
         return page.locator(this.selectors.productCell, {has: page.locator(this.selectors.productOptions[option])});
     }

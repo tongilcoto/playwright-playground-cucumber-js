@@ -535,7 +535,7 @@ Feature: All tests. March 2023
 		And I select "Menu" option at "Products" page
 		When I select "All Items" option at the left menu
 		Then I see "Products" page
-		And I see the "Menu option" at "Products" page
+		And I see "Menu" option at "Products" page
 		And I see the "products grid" at "Products" page
 	@TEST_SDPC-15 @TESTSET_SDPC-100 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @Detail @LeftMenu @page
 	Scenario: About left menu option in Detail page opens Saucelabs page
