@@ -20,3 +20,7 @@ Then(/^I see "(Login|Locked_Out)" error at Login page$/, {timeout: 10000}, async
 Given(/^I am logged into Products page with "(standard_user|problem_user|performance_glitch_user)" user$/, {timeout: 10000}, async function(user) {
     await validLogin(user);
 });
+
+Then(/^I see "(Login)" option at "(Login)" page$/, async function(option, page) {
+    await expect(global.loginPage.getOption(global.page, option)).toBeVisible();
+});

@@ -68,3 +68,10 @@ Finally we get into the last bunch of tests, the ones regarding the Left Menu: S
 Since it is a common element for all pages, I create a new trio of new files for it (steps, model and selector) for the first test
 
 I go test by test. For second test, I refactor current steps code for getting it externalized to be used by complex steps
+
+Then most of the test will be finished by just adding the new step parameter values by adding the new selectors, since the methods are already done.
+
+Some steps have the page as step parameter, this way it counts as only 1 step, but actually, since there is one step file per page, the same step is coded in each step file per page. For example:
+- I see "Menu" option at "Products" page 
+- I see "Login" option at "Login" page
+
