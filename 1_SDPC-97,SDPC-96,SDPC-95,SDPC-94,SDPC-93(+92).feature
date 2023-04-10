@@ -484,7 +484,7 @@ Feature: All tests. March 2023
 		Then I see "Products" page
 		And I see the "Menu option" at "Products" page
 		And I see the "products grid" at "Products" page
-	@TEST_SDPC-23 @TESTSET_SDPC-99 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @Products @page
+	@TEST_SDPC-23 @TESTSET_SDPC-99 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @Detail @page
 	Scenario: Logout left menu option in Products page sends you to Login page
 		Given I select "unselected" random product "name" when logged as "standard_user" user
 		And I select "Menu" option at "Detail" page

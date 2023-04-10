@@ -1,5 +1,5 @@
 const {expect} = require('@playwright/test');
-const {pageUrls, passwords, shoppingCartOptions, shoppingCartElementsRegexp, productStatuses, PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, position} = require('./constants.js');
+const {pageUrls, passwords, shoppingCartOptions, shoppingCartElementsRegexp, productStatuses, PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, position, RANDOM} = require('./constants.js');
 
 async function validLogin(user) {
     global.user = user;
@@ -54,6 +54,19 @@ async function validateProductShoppingCartOption(name, expectedOption) {
     await expect(global.productsPage.getProductOption(webProduct, expectedOption)).toHaveAttribute(PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, optionRegexp);
 }
 
+async function selectProductByComponentForStatusAndMethod(component, status, method) {
+    var products = [];
+    var productsToSelectIndexes = new Set();
+    var product = '';
+    var productText = '';
+    if (method === RANDOM) {
+        ({products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, 1));
+        ({product, productText} = await getProductForIndex(products, Array.from(productsToSelectIndexes)[0]));
+    }
+    await global.productsPage.selectProductOption(product, component);
+    [global.detailProduct.name, global.detailProduct.description, global.detailProduct.price] = productText.split('\n');
+}
+
 module.exports = {
     getNotRepeatedRandomList,
     selectMultipleProducts,
@@ -62,5 +75,6 @@ module.exports = {
     getProductsAndRandomIndexesFor,
     getProductForIndex,
     validLogin,
-    selectStepRequiredProducts
+    selectStepRequiredProducts,
+    selectProductByComponentForStatusAndMethod
 };
