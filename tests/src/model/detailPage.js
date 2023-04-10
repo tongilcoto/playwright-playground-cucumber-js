@@ -15,10 +15,13 @@ class detailPage {
         await this.getProductOption(webElement, option).click();
     }
 
+    getShoppingCartBadge(page) {
+        return page.locator(this.selectors.shoppingCartBadgeValue);
+    }
+
     async getShoppingCartBadgeValue(page) {
         return await page.locator(this.selectors.shoppingCartBadgeValue).textContent();
     }
-
 
 
 };
