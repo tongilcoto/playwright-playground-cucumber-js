@@ -181,7 +181,7 @@ Feature: All tests. March 2023
 	Scenario: Unselected product's Detail page shows correct product status when there is no selected product
 		Given I am logged into Products page with "standard_user" user
 		When I select "unselected" "random" product "name"
-		Then I don't see any badge in shopping cart at "Details" page
+		Then I don't see any badge in shopping cart at "Detail" page
 		And I see correct name and price for the Detail's product
 		And I see product option is "Add To Cart" for the Detail's product
 	@TEST_SDPC-70 @TESTSET_SDPC-104 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @Complete @LeftMenu @page
@@ -500,28 +500,28 @@ Feature: All tests. March 2023
 		Given I select "unselected" random product "name" when logged as "standard_user" user
 		When I select "Add To Cart" option at "Detail" page
 		Then I see product option is "Remove" for the Detail's product
-		And I see "1" badge in shopping cart at "Details" page
+		And I see "1" badge in shopping cart at "Detail" page
 	@TEST_SDPC-20 @TESTSET_SDPC-100 @TESTSET_SDPC-106 @Detail @page
 	Scenario: Removing the last product at Detail page updates the shopping cart and the product status
 		Given I select "Add To Cart" option for "1" "unselected" random products when logged as "standard_user" user
 		And I select "selected" "random" product "image"
 		When I select "Remove" option at "Detail" page
 		Then I see product option is "Add To Cart" for the Detail's product
-		And I don't see any badge in shopping cart at "Details" page
+		And I don't see any badge in shopping cart at "Detail" page
 	@TEST_SDPC-19 @TESTSET_SDPC-100 @TESTSET_SDPC-106 @Detail @page
 	Scenario: Selecting Not the First cart product at Detail page updates the shopping cart and the product status
 		Given I select "Add To Cart" option for "1" "unselected" random products when logged as "standard_user" user
 		And I select "unselected" "random" product "image"
 		When I select "Add To Cart" option at "Detail" page
 		Then I see product option is "Remove" for the Detail's product
-		And I see "2" badge in shopping cart at "Details" page
+		And I see "2" badge in shopping cart at "Detail" page
 	@TEST_SDPC-18 @TESTSET_SDPC-100 @TESTSET_SDPC-106 @Detail @page
 	Scenario: Removing not the last cart product at Detail page updates the shopping cart and the product status
 		Given I select "Add To Cart" option for "2" "unselected" random products when logged as "standard_user" user
 		And I select "selected" "random" product "image"
 		When I select "Remove" option at "Detail" page
 		Then I see product option is "Add To Cart" for the Detail's product
-		And I see "1" badge in shopping cart at "Details" page
+		And I see "1" badge in shopping cart at "Detail" page
 	@TEST_SDPC-17 @TESTSET_SDPC-99 @TESTSET_SDPC-106 @Products @page
 	Scenario: Removing the last product in Products page updates the shopping cart and the product status
 		Given I am logged into Products page with "standard_user" user

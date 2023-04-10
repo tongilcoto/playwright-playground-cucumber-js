@@ -16,6 +16,10 @@ Then(/^I see product option is "(Add To Cart|Remove)" for the Detail's product$/
     await expect(global.detailPage.getProductOption(global.page, expectedOption)).toHaveAttribute(PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, optionRegexp);
 });
 
-Then(/^I see "(\d)" badge in shopping cart at "Details" page$/, async function(badgeValue) {
+Then(/^I see "(\d)" badge in shopping cart at "Detail" page$/, async function(badgeValue) {
     expect(await global.detailPage.getShoppingCartBadgeValue(global.page)).toBe(badgeValue);
+});
+
+Then(/^I don't see any badge in shopping cart at "Detail" page$/, async function() {
+    await expect(global.detailPage.getShoppingCartBadge(global.page)).toHaveCount(0);
 });
