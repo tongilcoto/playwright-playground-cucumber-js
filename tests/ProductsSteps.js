@@ -1,11 +1,16 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
 const {productStatuses, RANDOM} = require('./src/constants.js');
-const {selectMultipleProducts, getProductAtPosition, validateProductShoppingCartOption, getProductsAndRandomIndexesFor, getProductForIndex, validLogin, selectStepRequiredProducts} = require('./src/utils.js');
+const {selectMultipleProducts, getProductAtPosition, validateProductShoppingCartOption, getProductsAndRandomIndexesFor, validLogin, selectStepRequiredProducts, selectProductByComponentForStatusAndMethod} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 Given(/^I select "(Add To Cart)" option for "(\d)" "(unselected)" random products when logged as "(standard_user)" user$/, async function(option, quantity, status, user) {
     await validLogin(user);
     await selectStepRequiredProducts(option, quantity, status);
+});
+
+Given(/^I select "(unselected)" random product "(name)" when logged as "(standard_user)" user$/, async function(status, option, user) {
+    await validLogin(user);
+    await selectProductByComponentForStatusAndMethod(option, productStatuses[status], RANDOM);
 });
 
 Then(/^I see "(Products)" page$/, {timeout: 10000}, async function(pageTitle) {
@@ -37,16 +42,7 @@ Then(/^I don't see any badge in shopping cart at "Products" page$/, async functi
 });
 
 When(/^I select "(unselected)" "(random)" product "(image|name)"$/, async function(status, option, component) {
-    var products = [];
-    var productsToSelectIndexes = new Set();
-    var product = '';
-    var productText = '';
-    if (option === RANDOM) {
-        ({products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, 1));
-        ({product, productText} = await getProductForIndex(products, Array.from(productsToSelectIndexes)[0]));
-    }
-    await global.productsPage.selectProductOption(product, component);
-    [global.detailProduct.name, global.detailProduct.description, global.detailProduct.price] = productText.split('\n');
+    await selectProductByComponentForStatusAndMethod(component, status, option);
 });
 
 When(/^I select "(Shopping Cart|Menu)" option at "Products" page$/, async function(option) {

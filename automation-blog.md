@@ -1,11 +1,11 @@
 # AUTOMATION BLOG
 
-## LOGIN tests
+## LOGIN tests. Ticket SDPC-98
 
 The very first Login tests. They aree hosted by SDPC-98. They are just 3 tests
 
 
-## PRODUCTS tests
+## PRODUCTS page tests. Ticket SDPC-99
 
 The next tests are Products test. They aree hosted by SDPC-99
 
@@ -71,10 +71,20 @@ I go test by test. For second test, I refactor current steps code for getting it
 
 Then most of the test will be finished by just adding the new step parameter values by adding the new selectors, since the methods are already done.
 
-Some steps have the page as step parameter, this way it counts as only 1 step, but actually, since there is one step file per page, the same step is coded in each step file per page. For example:
+Some steps have the page as step parameter, this way it counts as only 1 step, but actually, since there is one stepS file per page, the same step is coded in each stepS file per page. For example:
 - I see "Menu" option at "Products" page 
 - I see "Login" option at "Login" page
 
-In this case there is an option that opens another website, Saucelabs. I only dedicate one test for this option and instead of create a trio of new files, I have just added one step into Left Menu steps file.
+In this project there is an option that opens another website, Saucelabs. I only dedicate one test for this option and instead of create a trio of new files, I have just added one step into Left Menu steps file.
 
 HEADS UP: There is a problem with Playwright expect.toBeVisible() method. It does not reflect human eye visibility property, so it is not trustable ... For Products page tests I have used some hardcoded stuff, but further pages tests can affect this temporary solution
+
+
+## DETAIL page tests. Ticket SDPC-100
+
+
+Usually when starting a new page tests there are quite new steps to be implemented. On the other hand, the trio of the page files usually are already created because of previous tests checking if this page exists.
+
+Besides, sometimes there are new steps or new step parameters in previous pages that must be implemented for the Given steps in order to get to the actual page with the proper status.
+
+
