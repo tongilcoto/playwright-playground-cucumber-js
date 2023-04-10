@@ -7,11 +7,11 @@ Then(/^I see Detail page for "(selected)" product$/, async function(status) {
     await expect(global.detailPage.getProductName(global.page)).toHaveText(global.detailProduct.name);
 });
 
-When(/^I select "(Add To Cart)" option at "Detail" page$/, async function(option) {
+When(/^I select "(Add To Cart|Remove)" option at "Detail" page$/, async function(option) {
     await global.detailPage.selectProductOption(global.page, option);
 });
 
-Then(/^I see product option is "(Remove)" for the Detail's product$/, async function(expectedOption) {
+Then(/^I see product option is "(Add To Cart|Remove)" for the Detail's product$/, async function(expectedOption) {
     const optionRegexp = expectedOption === shoppingCartOptions.ADDTOCART ? shoppingCartElementsRegexp.ADDTOCART : shoppingCartElementsRegexp.REMOVE;
     await expect(global.detailPage.getProductOption(global.page, expectedOption)).toHaveAttribute(PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, optionRegexp);
 });

@@ -148,7 +148,7 @@ Feature: All tests. March 2023
 		When I select "unselected" "random" product "name"
 		Then I see "1" badge in shopping cart at "Detail" page
 		And I see correct name and price for the Detail's product
-		And I see product option is "Add to Cart" for the Detail's product
+		And I see product option is "Add To Cart" for the Detail's product
 	@TEST_SDPC-75 @e2e @regression
 	Scenario: Selected product's Detail page shows correct product status
 		Given I select "Add To Cart" option for "1" "unselected" random products when logged as "standard_user" user
@@ -183,7 +183,7 @@ Feature: All tests. March 2023
 		When I select "unselected" "random" product "name"
 		Then I don't see any badge in shopping cart at "Details" page
 		And I see correct name and price for the Detail's product
-		And I see product option is "Add to Cart" for the Detail's product
+		And I see product option is "Add To Cart" for the Detail's product
 	@TEST_SDPC-70 @TESTSET_SDPC-104 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @Complete @LeftMenu @page
 	Scenario: About left menu option in Complete page opens Saucelabs page
 		Given I finish the purchase with "1" selected random products when logged as "standard_user" user
@@ -350,7 +350,7 @@ Feature: All tests. March 2023
 		When I select "Continue" option at "Your Information" page
 		Then I see "Overview" page
 	@TEST_SDPC-44 @TESTSET_SDPC-102 @TESTSET_SDPC-106 @YourInformation @page
-	Scenario: Invalid Continue when only one (random) field is filled in Your Information page throws a field missing error
+	Scenario: Invalid Continue when only one random field is filled in Your Information page throws a field missing error
 		Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user
 		And I fill "one random" field at "Your Information" page
 		When I select "Continue" option at "Your Information" page
@@ -504,9 +504,9 @@ Feature: All tests. March 2023
 	@TEST_SDPC-20 @TESTSET_SDPC-100 @TESTSET_SDPC-106 @Detail @page
 	Scenario: Removing the last product at Detail page updates the shopping cart and the product status
 		Given I select "Add To Cart" option for "1" "unselected" random products when logged as "standard_user" user
-		And I select "random" "selected" product "image"
+		And I select "selected" "random" product "image"
 		When I select "Remove" option at "Detail" page
-		Then I see product option is "Add to Cart" for the Detail's product
+		Then I see product option is "Add To Cart" for the Detail's product
 		And I don't see any badge in shopping cart at "Details" page
 	@TEST_SDPC-19 @TESTSET_SDPC-100 @TESTSET_SDPC-106 @Detail @page
 	Scenario: Selecting Not the First cart product at Detail page updates the shopping cart and the product status
@@ -520,7 +520,7 @@ Feature: All tests. March 2023
 		Given I select "Add To Cart" option for "2" "unselected" random products when logged as "standard_user" user
 		And I select "selected" "random" product "image"
 		When I select "Remove" option at "Detail" page
-		Then I see product option is "Add to Cart" for the Detail's product
+		Then I see product option is "Add To Cart" for the Detail's product
 		And I see "1" badge in shopping cart at "Details" page
 	@TEST_SDPC-17 @TESTSET_SDPC-99 @TESTSET_SDPC-106 @Products @page
 	Scenario: Removing the last product in Products page updates the shopping cart and the product status

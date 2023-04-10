@@ -87,4 +87,6 @@ Usually when starting a new page tests there are quite new steps to be implement
 
 Besides, sometimes there are new steps or new step parameters in previous pages that must be implemented for the Given steps in order to get to the actual page with the proper status.
 
+One of the benefits of BDD is that some tests can be built with current steps without further work, for example, after all Products page tests and SDPC-21 Detail page test, SDPC-19 is done.
+
 

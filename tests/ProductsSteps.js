@@ -41,7 +41,7 @@ Then(/^I don't see any badge in shopping cart at "Products" page$/, async functi
     await expect(global.productsPage.getShoppingCartBadge(global.page)).toHaveCount(0);
 });
 
-When(/^I select "(unselected)" "(random)" product "(image|name)"$/, async function(status, option, component) {
+When(/^I select "(selected|unselected)" "(random)" product "(image|name)"$/, async function(status, option, component) {
     await selectProductByComponentForStatusAndMethod(component, status, option);
 });
 
