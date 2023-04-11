@@ -4,6 +4,7 @@ exports.productOptions = {
     "Remove": '[data-test^="remove-"]',
 };
 exports.pageOptions = {
-    "Back To Products": '#back-to-products'
+    "Back To Products": '#back-to-products',
+    "Shopping Cart": '.shopping_cart_link'
 }
 exports.shoppingCartBadgeValue = '.shopping_cart_badge';
