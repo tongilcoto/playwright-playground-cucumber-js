@@ -5,6 +5,7 @@ exports.productOptions = {
 };
 exports.pageOptions = {
     "Back To Products": '#back-to-products',
+    "Menu": '#react-burger-menu-btn',
     "Shopping Cart": '.shopping_cart_link'
 }
 exports.shoppingCartBadgeValue = '.shopping_cart_badge';
