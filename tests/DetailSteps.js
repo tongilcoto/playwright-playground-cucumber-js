@@ -27,3 +27,15 @@ Then(/^I don't see any badge in shopping cart at "Detail" page$/, async function
 When(/^I select "(Back To Products|Menu|Shopping Cart)" option at "Detail" page$/, async function(option) {
     await global.detailPage.selectPageOption(global.page, option);
 });
+
+Then(/^I see "(Menu)" option at "Detail" page$/, async function(option) {
+    if (option === "Menu") {
+        // PROBLEM: Playwright "expect.toBeVisible" doesn't work as a human being is assuming. Just technical flags that sometimes are not enough to determine the final visibility of an element.
+        // HACK: try to click the Menu button to check if it is actually visible (and close the left menu afterwards)
+        console.log("\nClicking " + option + " option")
+        await global.detailPage.selectPageOption(global.page, option);
+        await global.leftMenu.selectOption(global.page, "Close");
+    } else {
+        await expect(global.detailPage.getPageOption(global.page, option)).toBeVisible();
+    }
+});
