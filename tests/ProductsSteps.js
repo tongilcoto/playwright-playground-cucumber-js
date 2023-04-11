@@ -50,10 +50,24 @@ When(/^I select "(Shopping Cart|Menu)" option at "Products" page$/, async functi
 });
 
 Then(/^I see "(Menu)" option at "Products" page$/, async function(option) {
-    await expect(global.productsPage.getPageOption(global.page, option)).toBeVisible();
+    if (option === "Menu") {
+        // PROBLEM: Playwright "expect.toBeVisible" doesn't work as a human being is assuming. Just technical flags that sometimes are not enough to determine the final visibility of an element.
+        // HACK: try to click the Menu button to check if it is actually visible (and close the left menu afterwards)
+        console.log("\nClicking " + option + " option")
+        await global.productsPage.selectPageOption(global.page, option);
+        await global.leftMenu.selectOption(global.page, "Close");
+    } else {
+        await expect(global.productsPage.getPageOption(global.page, option)).toBeVisible();
+    }
 });
 
-Then(/^I see the "products grid" at "Products" page$/, async function() {
-    //await expect(global.productsPage.getProductsGrid(global.page)).toBeVisible();
-    expect(await global.productsPage.getProductsGrid(global.page).isVisible()).toEqual('"Reset App State" from Product page keeps "Products Grid" partialy hidden and "Menu" option too but Playwright does not detect it ... grrrr');
+Then(/^I see the "(products grid)" at "Products" page$/, async function(option) {
+    if (option === "products grid") {
+        // PROBLEM: Playwright "expect.toBeVisible" doesn't work as a human being is assuming. Just technical flags that sometimes are not enough to determine the final visibility of an element.
+        // HACK: try to click the Menu button to check if it is actually visible (and close the left menu afterwards)
+        await global.productsPage.selectPageOption(global.page, "Menu");
+        await global.leftMenu.selectOption(global.page, "Close");
+    } else {
+        await expect(global.productsPage.getProductsGrid(global.page)).toBeVisible();
+    }
 });

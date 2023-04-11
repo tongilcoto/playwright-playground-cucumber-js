@@ -397,7 +397,7 @@ Feature: All tests. March 2023
 		Given I select "unselected" random product "name" when logged as "standard_user" user
 		When I select "Back To Products" option at "Detail" page
 		Then I see "Products" page
-		And I see the "Menu option" at "Products" page
+		And I see "Menu" option at "Products" page
 		And I see the "products grid" at "Products" page
 	@TEST_SDPC-37 @TESTSET_SDPC-101 @TESTSET_SDPC-106 @YourCart @page
 	Scenario: Removing the Last cart product in Your Cart page updates the shopping cart and the product status
