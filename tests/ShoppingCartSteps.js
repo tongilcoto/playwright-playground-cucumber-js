@@ -1,5 +1,5 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {productStatuses, shoppingCartOptions, SHOPPINGCART_OPTION} = require('./src/constants.js');
+const {productStatuses, shoppingCartOptions, SHOPPINGCART_OPTION, optionStatuses} = require('./src/constants.js');
 const {validLogin, selectStepRequiredProducts} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
@@ -18,3 +18,8 @@ When(/^I select "(Checkout)" option at "Your Cart" page$/, async function(option
     await global.shoppingCartPage.selectPageOption(global.page, option);
 });
 
+Then(/^I see "(Checkout)" option is "(disabled)" at "Your Cart" page$/, async function(option, status) {
+    if (status === optionStatuses.DISABLED) {
+        await expect(global.shoppingCartPage.getPageOption(global.page, option)).toBeDisabled();
+    }
+});

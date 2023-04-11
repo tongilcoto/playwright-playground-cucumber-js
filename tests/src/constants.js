@@ -9,6 +9,10 @@ exports.errorTexts = {
 
 exports.language = "en_US";
 
+exports.optionStatuses = {
+    DISABLED: 'disabled'
+};
+
 exports.pageUrls = {
     main: 'https://demo.playwright.dev/todomvc',
     login: 'https://saucedemo.com'
