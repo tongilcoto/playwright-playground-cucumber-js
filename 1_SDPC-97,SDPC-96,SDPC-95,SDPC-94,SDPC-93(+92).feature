@@ -418,7 +418,7 @@ Feature: All tests. March 2023
 		And I select "Menu" option at "Detail" page
 		When I select "All Items" option at the left menu
 		Then I see "Products" page
-		And I see the "Menu option" at "Products" page
+		And I see "Menu" option at "Products" page
 		And I see the "products grid" at "Products" page
 	@TEST_SDPC-34 @TESTSET_SDPC-101 @TESTSET_SDPC-106 @YourCart @page
 	Scenario: Continue Shopping in Your Cart page sends you to Products page

@@ -89,4 +89,6 @@ Besides, sometimes there are new steps or new step parameters in previous pages 
 
 One of the benefits of BDD is that some tests can be built with current steps without further work, for example, after all Products page tests and SDPC-21 Detail page test, SDPC-19 is done.
 
+Thanks to all previous work, for all left menu tests in Detail page, only DetailStep file has been updated!! this is BDD great advantage
+
 
