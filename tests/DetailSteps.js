@@ -24,6 +24,6 @@ Then(/^I don't see any badge in shopping cart at "Detail" page$/, async function
     await expect(global.detailPage.getShoppingCartBadge(global.page)).toHaveCount(0);
 });
 
-When(/^I select "(Back To Products|Shopping Cart)" option at "Detail" page$/, async function(option) {
+When(/^I select "(Back To Products|Menu|Shopping Cart)" option at "Detail" page$/, async function(option) {
     await global.detailPage.selectPageOption(global.page, option);
 });
