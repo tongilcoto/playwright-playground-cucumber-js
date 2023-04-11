@@ -19,3 +19,6 @@ global.shoppingCartPage = new shoppingCartPage();
 const leftMenu = require('./src/model/leftMenu.js');
 global.leftMenu = new leftMenu();
 
+const yourInformationPage = require('./src/model/yourInformationPage.js');
+global.yourInformationPage = new yourInformationPage();
+

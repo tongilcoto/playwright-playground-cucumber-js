@@ -1,9 +1,20 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {productStatuses} = require('./src/constants.js');
-const {selectMultipleProducts, getProductAtPosition, validateProductShoppingCartOption, getProductsAndRandomIndexesFor, getProductForIndex} = require('./src/utils.js');
+const {productStatuses, shoppingCartOptions, SHOPPINGCART_OPTION} = require('./src/constants.js');
+const {validLogin, selectStepRequiredProducts} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 
 Then(/^I see "(Your Cart)" page$/, async function(pageTitle) {
     await expect(global.shoppingCartPage.getTitle(global.page)).toHaveText(pageTitle);
 });
+
+Given(/^I proceed to "Your Cart" page with "(\d)" selected random products when logged as "(standard_user)" user$/, async function(quantity, user) {
+    await validLogin(user);
+    await selectStepRequiredProducts(shoppingCartOptions.ADDTOCART, quantity, productStatuses.UNSELECTED);
+    await global.productsPage.selectPageOption(global.page, SHOPPINGCART_OPTION);
+});
+
+When(/^I select "(Checkout)" option at "Your Cart" page$/, async function(option) {
+    await global.shoppingCartPage.selectPageOption(global.page, option);
+});
+
