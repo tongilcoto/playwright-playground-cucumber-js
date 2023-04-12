@@ -100,5 +100,6 @@ I want to talk now about the technical issues I am finding dealing with Playwrig
 - `expect.toBeVisible()` doesn't reflect the real visibility of an object, sometimes it is hidden but the checks Playwright performs show a visibility status true. That's whym, in this cases, I created a hack in order to try to perform the `click` on it and see if there is no error. Luckily these scenarios allow a rollback action for the click, so the hack is possible.
 - I have learnt the difference between `locator.innerText()` and `locator.textContent()`: `innerText` joins each child element's text with `\n`, on the other hand `textContent` just concats all of them. So, it is something like `textContent() = innerText().trim()`. This difference is important because `locator` class has only `allTextContents()`method, there is no `allInnerTexts()` methods.
 
+Another decision I made is about split off some common elements in the page, typically headers and footers. This time the "Shopping Cart" icon "lives" in the pages header, which is a common element along the website, similar to the left menu. In this case, I decided to go ahead with the opposite solution. This time I will embed the header in each page files, so it is redundant code that should be addressed in next framework versions
 
 
