@@ -29,12 +29,21 @@ When(/^I select "(Remove)" option for random Cart product$/, async function(opti
     await selectMultipleProducts(productsToSelectIndexes, products, option, global.shoppingCartPage);
 });
 
-Then(/^I don't see "selected" product at "Your Cart" page$/, async function() {
+Then(/^I don't see "(any|selected)" product at "Your Cart" page$/, async function(option) {
     const {products} = await getProductsAndRandomIndexesFor(productStatuses.SELECTED, 1, global.shoppingCartPage);
-    const productsInfo = await products.allTextContents()
-    expect(productsInfo.filter(product => product.includes(getProductNameAtPosition(positions.LAST, productStatuses.UNSELECTED))).length).toEqual(0);
+    if (option === productStatuses.SELECTED) {
+        const productsInfo = await products.allTextContents()
+        expect(productsInfo.filter(product => product.includes(getProductNameAtPosition(positions.LAST, productStatuses.UNSELECTED))).length).toEqual(0);
+    } else {
+        expect(await products.count()).toEqual(0)
+    }
+
 })
 
 Then(/^I see "(\d)" badge in shopping cart at "Your Cart" page$/, async function(badgeValue) {
     expect(await global.shoppingCartPage.getShoppingCartBadgeValue(global.page)).toBe(badgeValue);
+});
+
+Then(/^I don't see any badge in shopping cart at "Your Cart" page$/, async function() {
+    await expect(global.shoppingCartPage.getShoppingCartBadge(global.page)).toHaveCount(0);
 });
