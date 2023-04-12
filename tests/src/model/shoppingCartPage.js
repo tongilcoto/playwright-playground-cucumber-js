@@ -3,6 +3,8 @@ class shoppingCartPage {
 
     selectors = require('../selectors/shoppingCartPage.js');
 
+    productNameIndex = 1;
+
     getTitle(page) {
         return page.locator(this.selectors.title);
     }
@@ -13,6 +15,30 @@ class shoppingCartPage {
 
     async selectPageOption(page, option) {
         await this.getPageOption(page, option).click();
+    }
+
+    getProductOption(webElement, option) {
+        return webElement.locator(this.selectors.productOptions[option]);
+    }
+
+    async selectProductOption(webElement, option) {
+        await this.getProductOption(webElement, option).click();
+    }
+
+    getListOfProductsFor(page, option) {
+        return page.locator(this.selectors.productCell, {has: page.locator(this.selectors.productOptions[option])});
+    }
+
+    getProductByName(page, text) {
+        return page.locator(this.selectors.productCell, {hasText: text});
+    }
+
+    async getShoppingCartBadgeValue(page) {
+        return await page.locator(this.selectors.shoppingCartBadgeValue).textContent();
+    }
+
+    getShoppingCartBadge(page) {
+        return page.locator(this.selectors.shoppingCartBadgeValue);
     }
 
 };

@@ -92,3 +92,13 @@ One of the benefits of BDD is that some tests can be built with current steps wi
 Thanks to all previous work, for all left menu tests in Detail page, only DetailStep file has been updated!! this is BDD great advantage
 
 
+## YOUR CART (shopping cart) page tests. Ticket SDPC-100
+
+Again the same rutine ... new page, new implemented steps the first tests plus some refactors, sometimes deep ones which implies strong regression on the previous implemented tests, and then just new parameters
+
+I want to talk now about the technical issues I am finding dealing with Playwright
+- `expect.toBeVisible()` doesn't reflect the real visibility of an object, sometimes it is hidden but the checks Playwright performs show a visibility status true. That's whym, in this cases, I created a hack in order to try to perform the `click` on it and see if there is no error. Luckily these scenarios allow a rollback action for the click, so the hack is possible.
+- I have learnt the difference between `locator.innerText()` and `locator.textContent()`: `innerText` joins each child element's text with `\n`, on the other hand `textContent` just concats all of them. So, it is something like `textContent() = innerText().trim()`. This difference is important because `locator` class has only `allTextContents()`method, there is no `allInnerTexts()` methods.
+
+
+
