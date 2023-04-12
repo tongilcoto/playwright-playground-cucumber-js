@@ -10,8 +10,11 @@ Before(async function() {
 
 });
 
-After(async function() {
+After(async function(scenario) {
 
+    if (scenario.result.status === 'FAILED') {
+        console.log('\n --- Error: \n\n' + scenario.result.message)
+    }
     await global.testContext.close();
     await global.browser.close();
     

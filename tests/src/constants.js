@@ -23,7 +23,7 @@ exports.passwords = {
     invalid: 'xxxxx'
 };
 
-exports.position = {
+exports.positions = {
     LAST: 'last'
 }
 

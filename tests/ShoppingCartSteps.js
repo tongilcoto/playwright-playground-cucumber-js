@@ -1,6 +1,6 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {productStatuses, shoppingCartOptions, SHOPPINGCART_OPTION, optionStatuses} = require('./src/constants.js');
-const {validLogin, selectStepRequiredProducts} = require('./src/utils.js');
+const {productStatuses, shoppingCartOptions, SHOPPINGCART_OPTION, optionStatuses, positions} = require('./src/constants.js');
+const {validLogin, selectStepRequiredProducts, getProductsAndRandomIndexesFor, selectMultipleProducts, getProductNameAtPosition} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 
@@ -10,7 +10,7 @@ Then(/^I see "(Your Cart)" page$/, async function(pageTitle) {
 
 Given(/^I proceed to "Your Cart" page with "(\d)" selected random products when logged as "(standard_user)" user$/, async function(quantity, user) {
     await validLogin(user);
-    await selectStepRequiredProducts(shoppingCartOptions.ADDTOCART, quantity, productStatuses.UNSELECTED);
+    await selectStepRequiredProducts(shoppingCartOptions.ADDTOCART, quantity, productStatuses.UNSELECTED, global.productsPage);
     await global.productsPage.selectPageOption(global.page, SHOPPINGCART_OPTION);
 });
 
@@ -22,4 +22,19 @@ Then(/^I see "(Checkout)" option is "(disabled)" at "Your Cart" page$/, async fu
     if (status === optionStatuses.DISABLED) {
         await expect(global.shoppingCartPage.getPageOption(global.page, option)).toBeDisabled();
     }
+});
+
+When(/^I select "(Remove)" option for random Cart product$/, async function(option) {
+    const {products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(productStatuses.SELECTED, 1, global.shoppingCartPage);
+    await selectMultipleProducts(productsToSelectIndexes, products, option, global.shoppingCartPage);
+});
+
+Then(/^I don't see "selected" product at "Your Cart" page$/, async function() {
+    const {products} = await getProductsAndRandomIndexesFor(productStatuses.SELECTED, 1, global.shoppingCartPage);
+    const productsInfo = await products.allTextContents()
+    expect(productsInfo.filter(product => product.includes(getProductNameAtPosition(positions.LAST, productStatuses.UNSELECTED))).length).toEqual(0);
+})
+
+Then(/^I see "(\d)" badge in shopping cart at "Your Cart" page$/, async function(badgeValue) {
+    expect(await global.shoppingCartPage.getShoppingCartBadgeValue(global.page)).toBe(badgeValue);
 });

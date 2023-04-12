@@ -3,6 +3,8 @@ class productsPage {
 
     selectors = require('../selectors/productsPage.js');
 
+    productNameIndex = 0;
+
     getTitleElement(page) {
         return page.locator(this.selectors.title);
     }

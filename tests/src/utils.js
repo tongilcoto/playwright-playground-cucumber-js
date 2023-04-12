@@ -1,5 +1,7 @@
 const {expect} = require('@playwright/test');
-const {pageUrls, passwords, shoppingCartOptions, shoppingCartElementsRegexp, productStatuses, PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, position, RANDOM} = require('./constants.js');
+const {pageUrls, passwords, shoppingCartOptions, shoppingCartElementsRegexp, productStatuses, PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, positions, RANDOM} = require('./constants.js');
+
+
 
 async function validLogin(user) {
     global.user = user;
@@ -7,9 +9,9 @@ async function validLogin(user) {
     await global.loginPage.loginWithCredentials(global.page, global.user, passwords["valid"]);
 } 
 
-async function selectStepRequiredProducts(option, quantity, status) {
-    const {products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, quantity);
-    await selectMultipleProducts(productsToSelectIndexes, products, option);
+async function selectStepRequiredProducts(option, quantity, status, currentPage) {
+    const {products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, quantity, currentPage);
+    await selectMultipleProducts(productsToSelectIndexes, products, option, currentPage);
 }
 
 function getNotRepeatedRandomList(numberOfItemsToSelect, totalNumberOfItems) {
@@ -20,29 +22,29 @@ function getNotRepeatedRandomList(numberOfItemsToSelect, totalNumberOfItems) {
     return set;
 }
 
-async function getProductsAndRandomIndexesFor(status, quantity) {
-    const products = await global.productsPage.getListOfProductsFor(global.page, status === productStatuses.SELECTED ? shoppingCartOptions.REMOVE : shoppingCartOptions.ADDTOCART);
+async function getProductsAndRandomIndexesFor(status, quantity, currentPage) {
+    const products = await currentPage.getListOfProductsFor(global.page, status === productStatuses.SELECTED ? shoppingCartOptions.REMOVE : shoppingCartOptions.ADDTOCART);
     const numberOfProducts = await products.count();
     const productsToSelectIndexes = getNotRepeatedRandomList(quantity, numberOfProducts);
     return {products, productsToSelectIndexes}
 }
 
-async function getProductForIndex(products, index) {
-    const productText = await products.nth(index).innerText(); 
-    const product = global.productsPage.getProductByName(global.page, productText.split('\n')[0]);
+async function getProductForIndex(products, index, currentPage) {
+    const productText = await products.nth(index).innerText();
+    const product = currentPage.getProductByName(global.page, productText.split('\n')[currentPage.productNameIndex]);
     return {product, productText};
 }
 
-async function selectMultipleProducts(indexesSet, products, option) {
+async function selectMultipleProducts(indexesSet, products, option, currentPage) {
     for (const index of indexesSet) {
-        const {product, productText} = await getProductForIndex(products, index);
-        await global.productsPage.selectProductOption(product, option);
-        global.productsStatus[option === shoppingCartOptions.ADDTOCART ? productStatuses.SELECTED : productStatuses.UNSELECTED].push(productText.split('\n')[0]);
+        const {product, productText} = await getProductForIndex(products, index, currentPage);
+        await currentPage.selectProductOption(product, option);
+        global.productsStatus[option === shoppingCartOptions.ADDTOCART ? productStatuses.SELECTED : productStatuses.UNSELECTED].push(productText.split('\n')[currentPage.productNameIndex]);
     }
 }
 
-function getProductAtPosition(productPosition, status) {
-    if (productPosition === position.LAST) {
+function getProductNameAtPosition(productPosition, status) {
+    if (productPosition === positions.LAST) {
         return global.productsStatus[status].slice(-1)[0]
     }
     return null
@@ -54,14 +56,14 @@ async function validateProductShoppingCartOption(name, expectedOption) {
     await expect(global.productsPage.getProductOption(webProduct, expectedOption)).toHaveAttribute(PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, optionRegexp);
 }
 
-async function selectProductByComponentForStatusAndMethod(component, status, method) {
+async function selectProductByComponentForStatusAndMethod(component, status, method, currentPage) {
     var products = [];
     var productsToSelectIndexes = new Set();
     var product = '';
     var productText = '';
     if (method === RANDOM) {
-        ({products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, 1));
-        ({product, productText} = await getProductForIndex(products, Array.from(productsToSelectIndexes)[0]));
+        ({products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, 1, currentPage));
+        ({product, productText} = await getProductForIndex(products, Array.from(productsToSelectIndexes)[0], currentPage));
     }
     await global.productsPage.selectProductOption(product, component);
     [global.detailProduct.name, global.detailProduct.description, global.detailProduct.price] = productText.split('\n');
@@ -70,7 +72,7 @@ async function selectProductByComponentForStatusAndMethod(component, status, met
 module.exports = {
     getNotRepeatedRandomList,
     selectMultipleProducts,
-    getProductAtPosition,
+    getProductNameAtPosition,
     validateProductShoppingCartOption,
     getProductsAndRandomIndexesFor,
     getProductForIndex,

@@ -1,11 +1,11 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
 const {productStatuses, RANDOM} = require('./src/constants.js');
-const {selectMultipleProducts, getProductAtPosition, validateProductShoppingCartOption, getProductsAndRandomIndexesFor, validLogin, selectStepRequiredProducts, selectProductByComponentForStatusAndMethod} = require('./src/utils.js');
+const {selectMultipleProducts, getProductNameAtPosition, validateProductShoppingCartOption, getProductsAndRandomIndexesFor, validLogin, selectStepRequiredProducts, selectProductByComponentForStatusAndMethod} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 Given(/^I select "(Add To Cart)" option for "(\d)" "(unselected)" random products when logged as "(standard_user)" user$/, async function(option, quantity, status, user) {
     await validLogin(user);
-    await selectStepRequiredProducts(option, quantity, status);
+    await selectStepRequiredProducts(option, quantity, status, global.productsPage);
 });
 
 Given(/^I select "(unselected)" random product "(name)" when logged as "(standard_user)" user$/, async function(status, option, user) {
@@ -18,8 +18,8 @@ Then(/^I see "(Products)" page$/, {timeout: 10000}, async function(pageTitle) {
 });
 
 When(/^I select "(Add To Cart|Remove)" option for "(\d)" "(selected|unselected)" random products at "Products" page$/, async function(option, quantity, status) {
-    const {products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, quantity);
-    await selectMultipleProducts(productsToSelectIndexes, products, option);
+    const {products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, quantity, global.productsPage);
+    await selectMultipleProducts(productsToSelectIndexes, products, option, global.productsPage);
 });
 
 Then(/^I see product option is "(Add To Cart|Remove)" for "(selected|unselected|all)" products at "Products" page$/, async function(option, status) {
@@ -30,7 +30,7 @@ Then(/^I see product option is "(Add To Cart|Remove)" for "(selected|unselected|
 });
 
 Then(/^I see product option is "(Add To Cart|Remove)" for "(last)" "(selected|unselected)" product at "Products" page$/, async function(option, position, status) {
-    await validateProductShoppingCartOption(getProductAtPosition(position, status), option);
+    await validateProductShoppingCartOption(getProductNameAtPosition(position, status), option);
 });
 
 Then(/^I see "(\d)" badge in shopping cart at "Products" page$/, async function(badgeValue) {
@@ -42,7 +42,7 @@ Then(/^I don't see any badge in shopping cart at "Products" page$/, async functi
 });
 
 When(/^I select "(selected|unselected)" "(random)" product "(image|name)"$/, async function(status, option, component) {
-    await selectProductByComponentForStatusAndMethod(component, status, option);
+    await selectProductByComponentForStatusAndMethod(component, status, option, global.productsPage);
 });
 
 When(/^I select "(Shopping Cart|Menu)" option at "Products" page$/, async function(option) {
