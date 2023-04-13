@@ -1,6 +1,6 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
 const {productStatuses, shoppingCartOptions, SHOPPINGCART_OPTION, optionStatuses, positions} = require('./src/constants.js');
-const {validLogin, selectStepRequiredProducts, getProductsAndRandomIndexesFor, selectMultipleProducts, getProductNameAtPosition} = require('./src/utils.js');
+const {validLogin, selectStepRequiredProducts, getProductsAndRandomIndexesFor, selectMultipleProducts, getProductNameAtPosition, validateActualProductsForStatus} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 
@@ -14,7 +14,7 @@ Given(/^I proceed to "Your Cart" page with "(\d)" selected random products when 
     await global.productsPage.selectPageOption(global.page, SHOPPINGCART_OPTION);
 });
 
-When(/^I select "(Checkout|Continue Shopping)" option at "Your Cart" page$/, async function(option) {
+When(/^I select "(Checkout|Continue Shopping|Shopping Cart)" option at "Your Cart" page$/, async function(option) {
     await global.shoppingCartPage.selectPageOption(global.page, option);
 });
 
@@ -46,4 +46,9 @@ Then(/^I see "(\d)" badge in shopping cart at "Your Cart" page$/, async function
 
 Then(/^I don't see any badge in shopping cart at "Your Cart" page$/, async function() {
     await expect(global.shoppingCartPage.getShoppingCartBadge(global.page)).toHaveCount(0);
+});
+
+Then(/^I see "selected" products at "Your Cart" page$/, async function() {
+    const {products} = await getProductsAndRandomIndexesFor(productStatuses.SELECTED, 1, global.shoppingCartPage);
+    await validateActualProductsForStatus(products, productStatuses.SELECTED, global.shoppingCartPage);
 });
