@@ -3,15 +3,15 @@ const {pageUrls, passwords, shoppingCartOptions, shoppingCartElementsRegexp, pro
 
 
 
-async function validLogin(user) {
-    global.user = user;
-    await global.page.goto(pageUrls['login']);
-    await global.loginPage.loginWithCredentials(global.page, global.user, passwords["valid"]);
+async function validLogin(user, page, loginPage) {
+    await page.goto(pageUrls['login']);
+    await loginPage.loginWithCredentials(page, user, passwords["valid"]);
+    return user;
 } 
 
-async function selectStepRequiredProducts(option, quantity, status, currentPage) {
-    const {products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, quantity, currentPage);
-    await selectMultipleProducts(productsToSelectIndexes, products, option, currentPage);
+async function selectStepRequiredProducts(page, option, quantity, status, currentPage) {
+    const {products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(page, status, quantity, currentPage);
+    return await selectMultipleProducts(page, productsToSelectIndexes, products, option, currentPage);
 }
 
 function getNotRepeatedRandomList(numberOfItemsToSelect, totalNumberOfItems) {
@@ -22,61 +22,63 @@ function getNotRepeatedRandomList(numberOfItemsToSelect, totalNumberOfItems) {
     return set;
 }
 
-async function getProductsAndRandomIndexesFor(status, quantity, currentPage) {
-    const products = await currentPage.getListOfProductsFor(global.page, status === productStatuses.SELECTED ? shoppingCartOptions.REMOVE : shoppingCartOptions.ADDTOCART);
+async function getProductsAndRandomIndexesFor(page, status, quantity, currentPage) {
+    const products = await currentPage.getListOfProductsFor(page, status === productStatuses.SELECTED ? shoppingCartOptions.REMOVE : shoppingCartOptions.ADDTOCART);
     const numberOfProducts = await products.count();
     const productsToSelectIndexes = getNotRepeatedRandomList(quantity, numberOfProducts);
     return {products, productsToSelectIndexes}
 }
 
-async function getProductForIndex(products, index, currentPage) {
+async function getProductForIndex(page, products, index, currentPage) {
     const productText = await products.nth(index).innerText();
-    const product = currentPage.getProductByName(global.page, productText.split('\n')[currentPage.productNameIndex]);
+    const product = currentPage.getProductByName(page, productText.split('\n')[currentPage.productNameIndex]);
     return {product, productText};
 }
 
-async function selectMultipleProducts(indexesSet, products, option, currentPage) {
+async function selectMultipleProducts(page, indexesSet, products, option, currentPage) {
+    const requiredProducts = []
     for (const index of indexesSet) {
-        const {product, productText} = await getProductForIndex(products, index, currentPage);
+        const {product, productText} = await getProductForIndex(page, products, index, currentPage);
         await currentPage.selectProductOption(product, option);
-        global.productsStatus[option === shoppingCartOptions.ADDTOCART ? productStatuses.SELECTED : productStatuses.UNSELECTED].push(productText.split('\n')[currentPage.productNameIndex]);
+        requiredProducts.push(productText.split('\n')[currentPage.productNameIndex]);
     }
+    return requiredProducts;
 }
 
-function getProductNameAtPosition(productPosition, status) {
+function getProductNameAtPosition(productPosition, products) {
     if (productPosition === positions.LAST) {
-        return global.productsStatus[status].slice(-1)[0]
+        return products.slice(-1)[0];
     }
     return null
 }
 
-async function validateProductShoppingCartOption(name, expectedOption) {
-    const webProduct = await global.productsPage.getProductByName(global.page, name);
+async function validateProductShoppingCartOption(page, productsPage, name, expectedOption) {
+    const webProduct = await productsPage.getProductByName(page, name);
     const optionRegexp = expectedOption === shoppingCartOptions.ADDTOCART ? shoppingCartElementsRegexp.ADDTOCART : shoppingCartElementsRegexp.REMOVE;
-    await expect(global.productsPage.getProductOption(webProduct, expectedOption)).toHaveAttribute(PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, optionRegexp);
+    await expect(productsPage.getProductOption(webProduct, expectedOption)).toHaveAttribute(PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, optionRegexp);
 }
 
-async function selectProductByComponentForStatusAndMethod(component, status, method, currentPage) {
+async function selectProductByComponentForStatusAndMethod(page, component, status, method, currentPage) {
     var products = [];
     var productsToSelectIndexes = new Set();
     var product = '';
     var productText = '';
     if (method === RANDOM) {
-        ({products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(status, 1, currentPage));
-        ({product, productText} = await getProductForIndex(products, Array.from(productsToSelectIndexes)[0], currentPage));
+        ({products, productsToSelectIndexes} = await getProductsAndRandomIndexesFor(page, status, 1, currentPage));
+        ({product, productText} = await getProductForIndex(page, products, Array.from(productsToSelectIndexes)[0], currentPage));
     }
-    await global.productsPage.selectProductOption(product, component);
-    [global.detailProduct.name, global.detailProduct.description, global.detailProduct.price] = productText.split('\n');
+    await currentPage.selectProductOption(product, component);
+    return productText.split('\n');
 }
 
-async function validateActualProductsForStatus(actualProducts, status, currentPage) {
+async function validateActualProductsForStatus(page, actualProducts, expectedProducts, currentPage) {
     const actualProductNames = []
     for (let index = 0; index < await actualProducts.count(); index++) {
-        const {productText} = await getProductForIndex(actualProducts, index, currentPage);
+        const {productText} = await getProductForIndex(page, actualProducts, index, currentPage);
         actualProductNames.push(productText.split('\n')[currentPage.productNameIndex]);
     };
-    const existingExpectedProducts = global.productsStatus[status].filter(productName => actualProductNames.includes(productName))
-    expect(existingExpectedProducts.length).toEqual(global.productsStatus[status].length)
+    const existingExpectedProducts = expectedProducts.filter(productName => actualProductNames.includes(productName))
+    expect(existingExpectedProducts.length).toEqual(expectedProducts.length)
 }
 
 

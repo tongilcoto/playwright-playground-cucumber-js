@@ -102,4 +102,99 @@ I want to talk now about the technical issues I am finding dealing with Playwrig
 
 Another decision I made is about split off some common elements in the page, typically headers and footers. This time the "Shopping Cart" icon "lives" in the pages header, which is a common element along the website, similar to the left menu. In this case, I decided to go ahead with the opposite solution. This time I will embed the header in each page files, so it is redundant code that should be addressed in next framework versions
 
+## HEADS UP: CUCUMBER INNERS: `Global` variables are shared by all scenarios.
 
+### Problem
+
+I have discovered that global variables, the ones embedded into the `global` world object, are shared by all scenarios
+So, the current approach I am using:
+- use a file to declare global variables `setup.js`
+
+```
+global.productsStatus = {
+    selected: [],
+    unselected: []
+};
+global.detailProduct = {};
+
+const loginPage = require('./src/model/loginPage.js');
+global.loginPage = new loginPage();
+
+const productsPage = require('./src/model/productsPage.js');
+global.productsPage = new productsPage();
+
+const detailPage = require('./src/model/detailPage.js');
+global.detailPage = new detailPage();
+
+const shoppingCartPage = require('./src/model/shoppingCartPage.js');
+global.shoppingCartPage = new shoppingCartPage();
+
+const leftMenu = require('./src/model/leftMenu.js');
+global.leftMenu = new leftMenu();
+
+const yourInformationPage = require('./src/model/yourInformationPage.js');
+global.yourInformationPage = new yourInformationPage();
+````
+
+- "Require" that file in cucumber command line run command, more precisely, `require` option sets the folder where the `setup.js` file is, alongside *steps* files and `hooks.js`
+````
+root
+ | 
+ |---- features
+ |---- tests
+         |
+         |---- <steps files>
+         |---- setup.js
+         |---- hooks.js
+````
+
+so, cucumber command line run command is: `./node_modules/.bin/cucumber-js --require tests --publish-quiet`
+
+Since `setup.js` is **only run once**, the variable is shared by all scenarios in the run. Note: when running Cucumber in parellel, with `--parallel 5` for example, the `setup.js` will run 5 times. 
+
+These run logs are when using the tag option `-t` in order to run a single test
+
+```
+tongilcoto in github.com playwright-playground-cucumber-js with SDPC-27-Close-burger-menu-in-shopping-cart > ./node_modules/.bin/cucumber-js --require tests --publish-quiet -t @TEST_SDPC-33
+.
+First Step. Browser: browser@d9481eabb66d49057297e9c455e2088e TestContext: browser-context@5cda82d8b9437bd2042601e20383408b Global Selected Products: 
+
+Sauce Labs Fleece Jacket
+...
+SDPC-33. Browser: browser@d9481eabb66d49057297e9c455e2088e TestContext: browser-context@5cda82d8b9437bd2042601e20383408b Global Selected Products: Sauce Labs Fleece Jacket
+
+SDPC-33. Actual: Sauce Labs Fleece Jacket
+..
+
+1 scenario (1 passed)
+4 steps (4 passed)
+````
+
+The first console log shows that `Global Selected Products` is empty and the teest passed.
+
+Conversely, when several tests are run these are the logs:
+
+````
+......
+First Step. Browser: browser@359aeb1a5c83924920116d54fc8017ce TestContext: browser-context@819b88099a07fdab58c2ae227d740aa2 Global Selected Products: Sauce Labs Fleece Jacket,Sauce Labs Fleece Jacket,Sauce Labs Bike Light
+
+Sauce Labs Fleece Jacket,Sauce Labs Fleece Jacket,Sauce Labs Bike Light,Sauce Labs Bolt T-Shirt
+...
+SDPC-33. Browser: browser@359aeb1a5c83924920116d54fc8017ce TestContext: browser-context@819b88099a07fdab58c2ae227d740aa2 Global Selected Products: Sauce Labs Fleece Jacket,Sauce Labs Fleece Jacket,Sauce Labs Bike Light,Sauce Labs Bolt T-Shirt
+
+SDPC-33. Actual: Sauce Labs Bolt T-Shirt
+````
+
+The `Brownser` id and the `TestContext` id shows that the logs belong to the same scenario and the first log shows that the same `Global Selected Products` in not empty this time, it was filled with actions from another tests and it was not reset
+
+### Solution
+
+Cucumber provides another `World` class object, same class as `global`, that it is called `this`: 
+- it is created for every scenario
+- **but it is only accessible from `hooks.js` file and *steps* files**. Note: it is not accessible for `BeforeAll` and `AfterAll` hooks either.
+
+Since the main objective of this setup file is to load the desired class file for each page or module, you can think about desktop web versus mobile web, the solution will involve
+- To use the `global` object for just the `require` file: `global.loginPage = require('./src/model/loginPage.js');` 
+- To instantiate the test variables in the `Before` hook at `hooks.js` file, including page classes variables, using this time the `this` object: `this.loginPage = new global.loginPage();`
+- To review *steps* files code in order to use `this` instead of `global`
+- To review the code outside *steps* files and *model* files in order to substitute all `global.` references by **a new function parameter**, which it will mean update *steps* files

@@ -3,6 +3,6 @@ const {expect} = require('@playwright/test');
 
 
 Then(/^I see "(Your Information)" page$/, async function(pageTitle) {
-    await expect(global.yourInformationPage.getTitle(global.page)).toContainText(pageTitle);
+    await expect(this.yourInformationPage.getTitle(this.page)).toContainText(pageTitle);
 });
 

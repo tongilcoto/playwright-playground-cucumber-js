@@ -386,7 +386,7 @@ Feature: All tests. March 2023
 		Given I select "unselected" random product "name" when logged as "standard_user" user
 		And I select "Menu" option at "Detail" page
 		When I select "Close" option at the left menu
-		Then I see the "Menu option" at "Detail" page
+		Then I see "Menu" option at "Detail" page
 	@TEST_SDPC-39 @TESTSET_SDPC-98 @TESTSET_SDPC-106 @Login @page
 	Scenario: Successful Login when using valid user and valid password lands you in Products page
 		Given I am "standard_user" user
