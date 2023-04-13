@@ -464,7 +464,7 @@ Feature: All tests. March 2023
 		Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user
 		And I select "Menu" option at "Your Cart" page
 		When I select "Close" option at the left menu
-		Then I see the "Menu option" at "Your Cart" page
+		Then I see "Menu" option at "Your Cart" page
 	@TEST_SDPC-26 @TESTSET_SDPC-101 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @YourCart @page
 	Scenario: Logout left menu option in Your Cart page sends you to Login page
 		Given I proceed to "Your Cart" page with "1" selected random products when logged as "standard_user" user
@@ -482,7 +482,7 @@ Feature: All tests. March 2023
 		And I select "Menu" option at "Your Cart" page
 		When I select "All Items" option at the left menu
 		Then I see "Products" page
-		And I see the "Menu option" at "Products" page
+		And I see "Menu" option at "Products" page
 		And I see the "products grid" at "Products" page
 	@TEST_SDPC-23 @TESTSET_SDPC-99 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @Detail @page
 	Scenario: Logout left menu option in Products page sends you to Login page
