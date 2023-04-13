@@ -69,6 +69,18 @@ async function selectProductByComponentForStatusAndMethod(component, status, met
     [global.detailProduct.name, global.detailProduct.description, global.detailProduct.price] = productText.split('\n');
 }
 
+async function validateActualProductsForStatus(actualProducts, status, currentPage) {
+    const actualProductNames = []
+    for (let index = 0; index < await actualProducts.count(); index++) {
+        const {productText} = await getProductForIndex(actualProducts, index, currentPage);
+        actualProductNames.push(productText.split('\n')[currentPage.productNameIndex]);
+    };
+    const existingExpectedProducts = global.productsStatus[status].filter(productName => actualProductNames.includes(productName))
+    expect(existingExpectedProducts.length).toEqual(global.productsStatus[status].length)
+}
+
+
+
 module.exports = {
     getNotRepeatedRandomList,
     selectMultipleProducts,
@@ -78,5 +90,6 @@ module.exports = {
     getProductForIndex,
     validLogin,
     selectStepRequiredProducts,
-    selectProductByComponentForStatusAndMethod
+    selectProductByComponentForStatusAndMethod,
+    validateActualProductsForStatus
 };
