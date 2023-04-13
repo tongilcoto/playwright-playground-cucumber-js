@@ -9,6 +9,7 @@ Then(/^I see "(Your Cart)" page$/, async function(pageTitle) {
 });
 
 Given(/^I proceed to "Your Cart" page with "(\d)" selected random products when logged as "(standard_user)" user$/, async function(quantity, user) {
+    console.log('\nFirst Step. Browser: ' + global.browser._guid + ' TestContext: ' + global.testContext._guid + ' Global Selected Products: ' + global.productsStatus['selected'])
     await validLogin(user);
     await selectStepRequiredProducts(shoppingCartOptions.ADDTOCART, quantity, productStatuses.UNSELECTED, global.productsPage);
     await global.productsPage.selectPageOption(global.page, SHOPPINGCART_OPTION);
@@ -51,4 +52,16 @@ Then(/^I don't see any badge in shopping cart at "Your Cart" page$/, async funct
 Then(/^I see "selected" products at "Your Cart" page$/, async function() {
     const {products} = await getProductsAndRandomIndexesFor(productStatuses.SELECTED, 1, global.shoppingCartPage);
     await validateActualProductsForStatus(products, productStatuses.SELECTED, global.shoppingCartPage);
+});
+
+Then(/^I see "(Menu)" option at "Your Cart" page$/, async function(option) {
+    if (option === "Menu") {
+        // PROBLEM: Playwright "expect.toBeVisible" doesn't work as a human being is assuming. Just technical flags that sometimes are not enough to determine the final visibility of an element.
+        // HACK: try to click the Menu button to check if it is actually visible (and close the left menu afterwards)
+        console.log("\nClicking " + option + " option")
+        await global.shoppingCartPage.selectPageOption(global.page, option);
+        await global.leftMenu.selectOption(global.page, "Close");
+    } else {
+        await expect(global.detailPage.getPageOption(global.page, option)).toBeVisible();
+    }
 });
