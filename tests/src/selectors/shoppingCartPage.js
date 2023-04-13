@@ -1,6 +1,7 @@
 exports.title = '.title';
 exports.pageOptions = {
-    "Checkout": '#checkout'
+    "Checkout": '#checkout',
+    "Continue Shopping": '#continue-shopping'
 }
 exports.productOptions = {
     "Remove": '[data-test^="remove-"]'
