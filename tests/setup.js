@@ -1,24 +1,12 @@
-global.productsStatus = {
-    selected: [],
-    unselected: []
-};
-global.detailProduct = {};
 
-const loginPage = require('./src/model/loginPage.js');
-global.loginPage = new loginPage();
+global.loginPage = require('./src/model/loginPage.js');
 
-const productsPage = require('./src/model/productsPage.js');
-global.productsPage = new productsPage();
+global.productsPage = require('./src/model/productsPage.js');
 
-const detailPage = require('./src/model/detailPage.js');
-global.detailPage = new detailPage();
+global.detailPage = require('./src/model/detailPage.js');
 
-const shoppingCartPage = require('./src/model/shoppingCartPage.js');
-global.shoppingCartPage = new shoppingCartPage();
+global.shoppingCartPage = require('./src/model/shoppingCartPage.js');
 
-const leftMenu = require('./src/model/leftMenu.js');
-global.leftMenu = new leftMenu();
+global.leftMenu = require('./src/model/leftMenu.js');
 
-const yourInformationPage = require('./src/model/yourInformationPage.js');
-global.yourInformationPage = new yourInformationPage();
-
+global.yourInformationPage = require('./src/model/yourInformationPage.js');

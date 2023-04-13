@@ -10,22 +10,21 @@ When(/^I see the left menu$/, async function() {
     // Then the only way to go is to wait for be HIDDEN
     // Snippet when the Left Menu IS NOT ACTIVE
     // console.log('Visible -> Not Visible')
-    // const isVisible = await global.leftMenu.getLeftMenu(global.page).isVisible();
-    // await expect(global.leftMenu.getLeftMenu(global.page)).toBeVisible();
+    // const isVisible = await this.leftMenu.getLeftMenu(this.page).isVisible();
+    // await expect(this.leftMenu.getLeftMenu(this.page)).toBeVisible();
     // console.log('started visible is ' + isVisible)
-    // await expect(global.leftMenu.getLeftMenu(global.page)).not.toBeVisible();
-    // const isVisible2 = await global.leftMenu.getLeftMenu(global.page).isVisible();
+    // await expect(this.leftMenu.getLeftMenu(this.page)).not.toBeVisible();
+    // const isVisible2 = await this.leftMenu.getLeftMenu(this.page).isVisible();
     // console.log('finished visible is ' + isVisible2)
 
-    await global.leftMenu.getLeftMenu(global.page).waitFor('hidden');
+    await this.leftMenu.getLeftMenu(this.page).waitFor('hidden');
 
 });
 
 When(/^I select "(About|All Items|Close|Logout|Reset App State)" option at the left menu$/, async function(option) {
-    await global.leftMenu.selectOption(global.page, option);
+    await this.leftMenu.selectOption(this.page, option);
 });
 
 Then(/^I see "Saucelabs" page$/, async function() {
-    console.log('[src="/images/logo.svg"]')
-    expect(await global.page.title()).toEqual(SAUCELABS_TITLE)
+    expect(await this.page.title()).toEqual(SAUCELABS_TITLE)
 });
