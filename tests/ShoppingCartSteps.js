@@ -14,7 +14,7 @@ Given(/^I proceed to "Your Cart" page with "(\d)" selected random products when 
     await global.productsPage.selectPageOption(global.page, SHOPPINGCART_OPTION);
 });
 
-When(/^I select "(Checkout|Continue Shopping|Shopping Cart)" option at "Your Cart" page$/, async function(option) {
+When(/^I select "(Checkout|Continue Shopping|Menu|Shopping Cart)" option at "Your Cart" page$/, async function(option) {
     await global.shoppingCartPage.selectPageOption(global.page, option);
 });
 
