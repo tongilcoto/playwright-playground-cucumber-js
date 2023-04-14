@@ -5,6 +5,8 @@ class shoppingCartPage {
 
     productNameIndex = 1;
 
+    nextPageOption = 'Checkout';
+
     getTitle(page) {
         return page.locator(this.selectors.title);
     }

@@ -1,5 +1,5 @@
 const {expect} = require('@playwright/test');
-const {pageUrls, passwords, shoppingCartOptions, shoppingCartElementsRegexp, productStatuses, PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, positions, RANDOM} = require('./constants.js');
+const {pageUrls, passwords, shoppingCartOptions, productStatuses, positions, RANDOM} = require('./constants.js');
 
 
 
@@ -54,8 +54,7 @@ function getProductNameAtPosition(productPosition, products) {
 
 async function validateProductShoppingCartOption(page, productsPage, name, expectedOption) {
     const webProduct = await productsPage.getProductByName(page, name);
-    const optionRegexp = expectedOption === shoppingCartOptions.ADDTOCART ? shoppingCartElementsRegexp.ADDTOCART : shoppingCartElementsRegexp.REMOVE;
-    await expect(productsPage.getProductOption(webProduct, expectedOption)).toHaveAttribute(PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, optionRegexp);
+    await expect(productsPage.getProductOption(webProduct, expectedOption)).toBeVisible();
 }
 
 async function selectProductByComponentForStatusAndMethod(page, component, status, method, currentPage) {
