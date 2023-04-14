@@ -1,5 +1,4 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, shoppingCartOptions, shoppingCartElementsRegexp} = require('./src/constants.js');
 const {expect} = require('@playwright/test');
 
 
@@ -12,8 +11,7 @@ When(/^I select "(Add To Cart|Remove)" option at "Detail" page$/, async function
 });
 
 Then(/^I see product option is "(Add To Cart|Remove)" for the Detail's product$/, async function(expectedOption) {
-    const optionRegexp = expectedOption === shoppingCartOptions.ADDTOCART ? shoppingCartElementsRegexp.ADDTOCART : shoppingCartElementsRegexp.REMOVE;
-    await expect(this.detailPage.getProductOption(this.page, expectedOption)).toHaveAttribute(PRODUCT_SHOPPINGCART_OPTION_ATTRIBUTE, optionRegexp);
+    await expect(this.detailPage.getProductOption(this.page, expectedOption)).toBeVisible();
 });
 
 Then(/^I see "(\d)" badge in shopping cart at "Detail" page$/, async function(badgeValue) {

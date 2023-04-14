@@ -10,3 +10,5 @@ global.shoppingCartPage = require('./src/model/shoppingCartPage.js');
 global.leftMenu = require('./src/model/leftMenu.js');
 
 global.yourInformationPage = require('./src/model/yourInformationPage.js');
+
+global.overviewPage = require('./src/model/overviewPage.js');

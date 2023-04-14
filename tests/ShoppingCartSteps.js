@@ -1,5 +1,5 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {productStatuses, shoppingCartOptions, SHOPPINGCART_OPTION, optionStatuses, positions} = require('./src/constants.js');
+const {productStatuses, shoppingCartOptions, optionStatuses, positions} = require('./src/constants.js');
 const {validLogin, selectStepRequiredProducts, getProductsAndRandomIndexesFor, selectMultipleProducts, getProductNameAtPosition, validateActualProductsForStatus} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
@@ -11,7 +11,7 @@ Then(/^I see "(Your Cart)" page$/, async function(pageTitle) {
 Given(/^I proceed to "Your Cart" page with "(\d)" selected random products when logged as "(standard_user)" user$/, async function(quantity, user) {
     this.user =  await validLogin(user, this.page, this.loginPage);
     this.productsStatus[productStatuses.SELECTED] = await selectStepRequiredProducts(this.page, shoppingCartOptions.ADDTOCART, quantity, productStatuses.UNSELECTED, this.productsPage);
-    await this.productsPage.selectPageOption(this.page, SHOPPINGCART_OPTION);
+    await this.productsPage.selectPageOption(this.page, this.productsPage.nextPageOption);
 });
 
 When(/^I select "(Checkout|Continue Shopping|Menu|Shopping Cart)" option at "Your Cart" page$/, async function(option) {
