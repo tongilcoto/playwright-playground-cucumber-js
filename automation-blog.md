@@ -198,3 +198,9 @@ Since the main objective of this setup file is to load the desired class file fo
 - To instantiate the test variables in the `Before` hook at `hooks.js` file, including page classes variables, using this time the `this` object: `this.loginPage = new global.loginPage();`
 - To review *steps* files code in order to use `this` instead of `global`
 - To review the code outside *steps* files and *model* files in order to substitute all `global.` references by **a new function parameter**, which it will mean update *steps* files
+
+Note: I think `global` object variables **cannot be modified by two concurrent scenarios** since there is no such situation
+- Not parallelization: all scenarios are run sequentially by just one worker
+- Parallelization: each cucumber worker loads the `setup.js`, so it is not being affected by the other workers running concurrently.
+
+So, it would be enough if the variables at the `global` object get initialized in the `Before` hook at `hooks.js` file
