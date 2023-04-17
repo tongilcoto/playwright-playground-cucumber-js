@@ -24,7 +24,7 @@ When(/^I fill all fields at "Your Information" page$/, async function() {
     this.filledFields.push(informationFields.POSTAL_CODE);
 });
 
-When(/^I fill "(first name)" and "(last name|zip\/postal code)"$/, async function(option1, option2) {
+When(/^I fill "(first name|last name)" and "(last name|zip\/postal code)"$/, async function(option1, option2) {
     if (option1 === informationFields.FIRST_NAME || option2 === informationFields.FIRST_NAME) { 
         await this.yourInformationPage.fillFirstName(this.page);
         this.filledFields.push(informationFields.FIRST_NAME);
@@ -43,7 +43,7 @@ When(/^I select "(Continue)" option at "Your Information" page$/, async function
     await this.yourInformationPage.selectPageOption(this.page, option); 
 });
 
-Then(/^I see "(last name missing|zip\/postal code missing)" error at Your Information page$/, async function (error) {
+Then(/^I see "(first name missing|last name missing|zip\/postal code missing)" error at Your Information page$/, async function (error) {
     await expect(this.yourInformationPage.getError(this.page)).toBeVisible();
 });
 
