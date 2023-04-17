@@ -7,6 +7,12 @@ exports.errorTexts = {
     },
 };
 
+exports.informationFields = {
+    FIRST_NAME: 'first name',
+    LAST_NAME: 'last name',
+    POSTAL_CODE: 'zip/postal code'
+}
+
 exports.language = "en_US";
 
 exports.optionStatuses = {
@@ -41,3 +47,4 @@ exports.shoppingCartOptions = {
     ADDTOCART: 'Add To Cart',
     REMOVE: 'Remove'
 };
+

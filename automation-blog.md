@@ -228,5 +228,41 @@ Now. productsPage class:
 ````
 
 
+I have practiced visual assertions in this block of tests, even dealing with CSS Style. When dealing with colors, here there is a good way to check color value for `.toHaveCSS(<color_property_name>, <color_value>)` 
+````
+    const color = await docsLink.evaluate((e) => {
+        return window.getComputedStyle(e).getPropertyValue("color")
+    })
+```
 
+
+## TO DO
+
+### TECHNICAL DEBT
+
+1.- Playwright - Cucumber integration for try - expect - catch blocks
+
+Currently it is not working ....
+
+**Current flow**
+
+- `try`
+- `expect`
+- `expect` fails
+- `After` hook with `failed` status
+- `context.close()`
+- 'catch' 
+
+**Expected flow**
+- `try`
+- `expect`
+- `expect` fails
+- 'catch' 
+
+Notice that with the current flow, the scenario status cannot be reverted to `passed` 
+
+
+2.- Playwright - Cucumber integration for `expect` custom messages
+
+The custom message does not appear in the run console output
 
