@@ -20,11 +20,11 @@ When(/^I fill all fields at "Your Information" page$/, async function() {
     this.filledFields.push(informationFields.FIRST_NAME);
     await this.yourInformationPage.fillLastName(this.page);
     this.filledFields.push(informationFields.LAST_NAME);
-    await this.yourInformationPage.fillZipCode(this.page);
+    await this.yourInformationPage.fillPostalCode(this.page);
     this.filledFields.push(informationFields.POSTAL_CODE);
 });
 
-When(/^I fill "(first name)" and "(last name)"$/, async function(option1, option2) {
+When(/^I fill "(first name)" and "(last name|zip\/postal code)"$/, async function(option1, option2) {
     if (option1 === informationFields.FIRST_NAME || option2 === informationFields.FIRST_NAME) { 
         await this.yourInformationPage.fillFirstName(this.page);
         this.filledFields.push(informationFields.FIRST_NAME);
@@ -33,13 +33,17 @@ When(/^I fill "(first name)" and "(last name)"$/, async function(option1, option
         await this.yourInformationPage.fillLastName(this.page);
         this.filledFields.push(informationFields.LAST_NAME);
     }
+    if (option1 === informationFields.POSTAL_CODE || option2 === informationFields.POSTAL_CODE) {
+        await this.yourInformationPage.fillPostalCode(this.page);
+        this.filledFields.push(informationFields.POSTAL_CODE);
+    }
 });
 
 When(/^I select "(Continue)" option at "Your Information" page$/, async function(option) {
     await this.yourInformationPage.selectPageOption(this.page, option); 
 });
 
-Then(/^I see "(zip\/postal code missing)" error at Your Information page$/, async function (error) {
+Then(/^I see "(last name missing|zip\/postal code missing)" error at Your Information page$/, async function (error) {
     await expect(this.yourInformationPage.getError(this.page)).toBeVisible();
 });
 
@@ -48,7 +52,7 @@ Then(/^I see empty fields placeholder and underline in red font plus an error ic
     const emptyFields = Object.values(informationFields).filter(field => !(this.filledFields.includes(field)));
     for (let field of emptyFields) {
         await expect(this.yourInformationPage.getField(this.page, field, true)).toBeEmpty();
-        await expect(this.yourInformationPage.getField(this.page, field, true)).toHaveCSS('border-bottom-color', "rgb(226, 35, 26)");
+        await expect(this.yourInformationPage.getField(this.page, field, true)).toHaveCSS('border-bottom-color', 'rgb(226, 35, 26)');
         await expect(this.yourInformationPage.getErrorIconAtFieldWithError(this.page, field)).toBeVisible();
     }
 });
