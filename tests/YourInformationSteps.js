@@ -1,5 +1,5 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {productStatuses, shoppingCartOptions} = require('./src/constants.js');
+const {productStatuses, shoppingCartOptions, informationFields} = require('./src/constants.js');
 const {validLogin, selectStepRequiredProducts } = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
@@ -17,11 +17,48 @@ Given(/^I proceed to "Your Information" page with "(\d)" selected random product
 
 When(/^I fill all fields at "Your Information" page$/, async function() {
     await this.yourInformationPage.fillFirstName(this.page);
+    this.filledFields.push(informationFields.FIRST_NAME);
     await this.yourInformationPage.fillLastName(this.page);
+    this.filledFields.push(informationFields.LAST_NAME);
     await this.yourInformationPage.fillZipCode(this.page);
+    this.filledFields.push(informationFields.POSTAL_CODE);
+});
+
+When(/^I fill "(first name)" and "(last name)"$/, async function(option1, option2) {
+    if (option1 === informationFields.FIRST_NAME || option2 === informationFields.FIRST_NAME) { 
+        await this.yourInformationPage.fillFirstName(this.page);
+        this.filledFields.push(informationFields.FIRST_NAME);
+    }
+    if (option1 === informationFields.LAST_NAME || option2 === informationFields.LAST_NAME) {
+        await this.yourInformationPage.fillLastName(this.page);
+        this.filledFields.push(informationFields.LAST_NAME);
+    }
 });
 
 When(/^I select "(Continue)" option at "Your Information" page$/, async function(option) {
     await this.yourInformationPage.selectPageOption(this.page, option); 
 });
 
+Then(/^I see "(zip\/postal code missing)" error at Your Information page$/, async function (error) {
+    await expect(this.yourInformationPage.getError(this.page)).toBeVisible();
+});
+
+Then(/^I see empty fields placeholder and underline in red font plus an error icon$/,async function() {
+    // very visual step ... prone to be be changed ... just for demoing purposes
+    const emptyFields = Object.values(informationFields).filter(field => !(this.filledFields.includes(field)));
+    for (let field of emptyFields) {
+        await expect(this.yourInformationPage.getField(this.page, field, true)).toBeEmpty();
+        await expect(this.yourInformationPage.getField(this.page, field, true)).toHaveCSS('border-bottom-color', "rgb(226, 35, 26)");
+        await expect(this.yourInformationPage.getErrorIconAtFieldWithError(this.page, field)).toBeVisible();
+    }
+});
+
+Then(/^I don't see not-empty fields placeholder and underline in red font plus an error icon$/, async function() {
+    const notEmptyFields = Object.values(informationFields).filter(field => this.filledFields.includes(field));
+    for (let field of notEmptyFields) {
+        await expect(this.yourInformationPage.getField(this.page, field, true), "Error: configuration should be not present").not.toBeVisible();
+        await expect(this.yourInformationPage.getField(this.page, field, false)).toBeVisible();
+        await expect(this.yourInformationPage.getField(this.page, field, false)).not.toBeEmpty();
+        await expect(this.yourInformationPage.getErrorIconAtFieldWithError(this.page, field)).not.toBeVisible();
+    }
+});

@@ -1,4 +1,6 @@
 
+const {informationFields} = require('../constants.js');
+
 class yourInformationPage {
 
     selectors = require('../selectors/yourInformationPage.js');
@@ -8,15 +10,15 @@ class yourInformationPage {
     }
 
     async fillFirstName(page) {
-        await page.locator(this.selectors.firstName).fill('Ton');
+        const fn = await this.getField(page, informationFields.FIRST_NAME, false).fill('Ton');
     }
 
     async fillLastName(page) {
-        await page.locator(this.selectors.lastName).fill('Gil');
+        await this.getField(page, informationFields.LAST_NAME, false).fill('Gil');
     }
 
     async fillZipCode(page) {
-        await page.locator(this.selectors.zipCode).fill('28039');
+        await this.getField(page, informationFields.POSTAL_CODE, false).fill('28039');
     }
 
     getPageOption(page, option) {
@@ -26,6 +28,20 @@ class yourInformationPage {
     async selectPageOption(page, option) {
         await this.getPageOption(page, option).click();
     }
+
+    getError(page) {
+        return page.locator(this.selectors.error);
+    }
+
+    getField(page, field, withError) {
+        const option = withError ? 'error_' + field : field;
+        return page.locator(this.selectors.fields[option])
+    }
+
+    getErrorIconAtFieldWithError(page, field) {
+        return page.locator(this.selectors.errorIconForField[field])
+    }
+        
 
 };
 

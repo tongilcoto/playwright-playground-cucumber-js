@@ -9,6 +9,8 @@ Before(async function() {
         unselected: []
     };
     this.detailProduct = {};
+
+    this.filledFields = [];
     
     this.loginPage = new global.loginPage();
     
