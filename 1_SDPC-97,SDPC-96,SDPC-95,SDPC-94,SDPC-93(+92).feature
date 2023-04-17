@@ -372,7 +372,7 @@ Feature: All tests. March 2023
 		When I select "Continue" option at "Your Information" page
 		Then I see "last name missing" error at Your Information page
 		And I see empty fields placeholder and underline in red font plus an error icon
-		And I don't see "first name" and "zip/postal code" placeholder and underline in red font plus an error icon
+		And I don't see not-empty fields placeholder and underline in red font plus an error icon
 	@TEST_SDPC-41 @TESTSET_SDPC-102 @TESTSET_SDPC-106 @YourInformation @page
 	Scenario: Invalid Continue when zip/postal code is missing in Your Information page throws a field missing error
 		Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user

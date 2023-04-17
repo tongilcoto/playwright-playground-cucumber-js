@@ -17,7 +17,7 @@ class yourInformationPage {
         await this.getField(page, informationFields.LAST_NAME, false).fill('Gil');
     }
 
-    async fillZipCode(page) {
+    async fillPostalCode(page) {
         await this.getField(page, informationFields.POSTAL_CODE, false).fill('28039');
     }
 
