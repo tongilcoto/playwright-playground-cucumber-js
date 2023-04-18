@@ -16,5 +16,6 @@ exports.errorIconForField = {
 exports.pageOptions = {
     "Cancel": '#cancel',
     "Continue": '#continue',
-    "Dismiss error": '.error-button'
+    "Dismiss error": '.error-button',
+    "Menu": '#react-burger-menu-btn'
 };
