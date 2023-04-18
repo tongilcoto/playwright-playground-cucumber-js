@@ -1,5 +1,5 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {language, pageUrls, passwords, errorTexts} = require('./src/constants.js');
+const {pageUrls, passwords, errorTexts} = require('./src/constants.js');
 const {validLogin} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
@@ -13,7 +13,7 @@ When(/^I login with user "(valid|invalid)" password$/, async function(password) 
 });
 
 Then(/^I see "(Login|Locked_Out)" error at Login page$/, {timeout: 10000}, async function(error) {
-    const errorText = errorTexts[error][language];
+    const errorText = errorTexts[error][this.language];
     await expect(this.loginPage.getLoginErrorElement(this.page, error)).toHaveText(errorText);
 });
 

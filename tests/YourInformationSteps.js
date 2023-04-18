@@ -1,5 +1,5 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {productStatuses, shoppingCartOptions, informationFields} = require('./src/constants.js');
+const {productStatuses, shoppingCartOptions, informationFields, FIRST_EMPTY_FIELD_MISSING, errorTexts} = require('./src/constants.js');
 const {validLogin, selectStepRequiredProducts } = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
@@ -39,12 +39,21 @@ When(/^I fill "(first name|last name)" and "(last name|zip\/postal code)"$/, asy
     }
 });
 
+When(/^I fill "one random" field at "Your Information" page$/, async function() {
+    const field = Object.values(informationFields)[Math.floor(Math.random() * Object.values(informationFields).length)];
+    await this.yourInformationPage.fillField(this.page, field);
+    this.filledFields.push(field);
+});
+
 When(/^I select "(Continue)" option at "Your Information" page$/, async function(option) {
     await this.yourInformationPage.selectPageOption(this.page, option); 
 });
 
-Then(/^I see "(first name missing|last name missing|zip\/postal code missing)" error at Your Information page$/, async function (error) {
+Then(/^I see "(first empty field missing|first name missing|last name missing|zip\/postal code missing)" error at Your Information page$/, async function (errorKey) {
     await expect(this.yourInformationPage.getError(this.page)).toBeVisible();
+    const field = errorKey === FIRST_EMPTY_FIELD_MISSING? Object.values(informationFields).filter(field => !(this.filledFields.includes(field)))[0] : '';
+    errorKey = field ? field + ' missing' : errorKey;
+    await expect(this.yourInformationPage.getError(this.page)).toContainText(errorTexts[errorKey][this.language]);
 });
 
 Then(/^I see empty fields placeholder and underline in red font plus an error icon$/,async function() {

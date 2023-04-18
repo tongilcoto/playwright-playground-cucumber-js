@@ -21,6 +21,11 @@ class yourInformationPage {
         await this.getField(page, informationFields.POSTAL_CODE, false).fill('28039');
     }
 
+    async fillField(page, field) {
+        await this.getField(page, field, false).fill('random');
+    }
+
+
     getPageOption(page, option) {
         return page.locator(this.selectors.pageOptions[option]);
     }

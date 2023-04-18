@@ -5,15 +5,24 @@ exports.errorTexts = {
     Locked_Out: {
         en_US: 'Epic sadface: Sorry, this user has been locked out.'
     },
+    "first name missing":  {
+        en_US: 'Error: First Name is required'
+    },
+    "last name missing":  {
+        en_US: 'Error: Last Name is required'
+    },
+    "zip\/postal code missing":  {
+        en_US: 'Error: Postal Code is required'
+    }
 };
+
+exports.FIRST_EMPTY_FIELD_MISSING = 'first empty field missing';
 
 exports.informationFields = {
     FIRST_NAME: 'first name',
     LAST_NAME: 'last name',
     POSTAL_CODE: 'zip/postal code'
 }
-
-exports.language = "en_US";
 
 exports.optionStatuses = {
     DISABLED: 'disabled'
