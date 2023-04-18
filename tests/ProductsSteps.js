@@ -64,7 +64,7 @@ Then(/^I see "(Menu)" option at "Products" page$/, async function(option) {
 Then(/^I see the "products grid" at "Products" page$/, async function() {
     // PROBLEM: Playwright "expect.toBeVisible" doesn't work as a human being is assuming. Just technical flags that sometimes are not enough to determine the final visibility of an element.
     // HACK: try to click the Menu button to check if it is actually visible (and close the left menu afterwards)
-    console.log("\nKnown Hack: Clicking " + option + " option")
+    console.log("\nKnown Hack: Clicking Menu option")
     await this.productsPage.selectPageOption(this.page, "Menu");
     await this.leftMenu.selectOption(this.page, "Close");
 });
