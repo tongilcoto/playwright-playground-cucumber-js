@@ -11,6 +11,8 @@ Before(async function() {
     this.detailProduct = {};
 
     this.filledFields = [];
+
+    this.language = 'en_US'
     
     this.loginPage = new global.loginPage();
     
