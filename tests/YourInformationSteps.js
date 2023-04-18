@@ -1,5 +1,5 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {productStatuses, shoppingCartOptions, informationFields, FIRST_EMPTY_FIELD_MISSING, errorTexts} = require('./src/constants.js');
+const {productStatuses, shoppingCartOptions, informationFields, RANDOM, FIRST_EMPTY_FIELD_MISSING, errorTexts} = require('./src/constants.js');
 const {validLogin, selectStepRequiredProducts } = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
@@ -39,8 +39,10 @@ When(/^I fill "(first name|last name)" and "(last name|zip\/postal code)"$/, asy
     }
 });
 
-When(/^I fill "one random" field at "Your Information" page$/, async function() {
-    const field = Object.values(informationFields)[Math.floor(Math.random() * Object.values(informationFields).length)];
+When(/^I fill "(one random|zip\/postal code)" field at "Your Information" page$/, async function(option) {
+    const field = option.includes(RANDOM)
+        ? Object.values(informationFields)[Math.floor(Math.random() * Object.values(informationFields).length)]
+        : option;
     await this.yourInformationPage.fillField(this.page, field);
     this.filledFields.push(field);
 });
