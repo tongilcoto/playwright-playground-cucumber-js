@@ -338,13 +338,13 @@ Feature: All tests. March 2023
 		And I see "selected" products at "Your Cart" page
 	@TEST_SDPC-46 @TESTSET_SDPC-102 @TESTSET_SDPC-106 @YourInformation @page
 	Scenario: Invalid Continue when all fields are missing in Your Information page throws a field missing error
-		Given I proceed to "Your INFORMATION" page with "1" selected random products when logged as "standard_user" user
+		Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user
 		When I select "Continue" option at "Your Information" page
 		Then I see "first name missing" error at Your Information page
 		And I see empty fields placeholder and underline in red font plus an error icon
 		And I don't see not-empty fields placeholder and underline in red font plus an error icon
 	@TEST_SDPC-45 @TESTSET_SDPC-102 @TESTSET_SDPC-106 @YourInformation @page
-	Scenario: Valid Continue in Your Information page in Your Information page sends you to Overview page
+	Scenario: Valid Continue in Your Information page sends you to Overview page
 		Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user
 		And I fill all fields at "Your Information" page
 		When I select "Continue" option at "Your Information" page
@@ -484,8 +484,8 @@ Feature: All tests. March 2023
 		Then I see "Products" page
 		And I see "Menu" option at "Products" page
 		And I see the "products grid" at "Products" page
-	@TEST_SDPC-23 @TESTSET_SDPC-99 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @Detail @page
-	Scenario: Logout left menu option in Products page sends you to Login page
+	@TEST_SDPC-23 @TESTSET_SDPC-100 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @Detail @LeftMenu @page
+	Scenario: Logout left menu option in Detail page sends you to Login page
 		Given I select "unselected" random product "name" when logged as "standard_user" user
 		And I select "Menu" option at "Detail" page
 		When I select "Logout" option at the left menu
@@ -622,10 +622,25 @@ Feature: All tests. March 2023
 	Scenario: Shopping cart access from Products page
 		Given I am logged into Products page with "standard_user" user
 		When I select "Shopping Cart" option at "Products" page
-		Then I see "Your Cart" page		
+		Then I see "Your Cart" page
 	@TEST_SDPC-1 @TESTSET_SDPC-99 @TESTSET_SDPC-106 @Products @page
 	Scenario: Selecting 1 product in Products page updates the shopping cart and the product status
 		Given I am logged into Products page with "standard_user" user
 		When I select "Add To Cart" option for "1" "unselected" random products at "Products" page
 		Then I see product option is "Remove" for "selected" products at "Products" page
 		And I see "1" badge in shopping cart at "Products" page
+	@TEST_SDPC-111 @TESTSET_SDPC-102 @YourInformation @page
+	Scenario: Valid Continue after a missing field error sends you to Overview page
+		Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user
+		And I fill "first name" and "zip/postal code"
+		And I select "Continue" option at "Your Information" page
+		And I fill "zip/postal code" field at "Your Information" page
+		When I select "Continue" option at "Your Information" page
+		Then I see "Overview" page
+	@TEST_SDPC-112 @TESTSET_SDPC-102 @YourInformation @page
+	Scenario: Dismiss error option clears error mode in the information fields
+		Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user
+		And I fill "first name" and "zip/postal code"
+		And I select "Continue" option at "Your Information" page
+		When I select "Dismiss error" option at "Your Information" page
+		Then I don't see empty fields placeholder and underline in red font plus an error icon
