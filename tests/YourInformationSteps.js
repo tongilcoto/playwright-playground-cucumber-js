@@ -47,7 +47,7 @@ When(/^I fill "(one random|zip\/postal code)" field at "Your Information" page$/
     this.filledFields.push(field);
 });
 
-When(/^I select "(Cancel|Continue|Dismiss error|Menu)" option at "Your Information" page$/, async function(option) {
+When(/^I select "(Cancel|Continue|Dismiss error|Menu|Shopping Cart)" option at "Your Information" page$/, async function(option) {
     await this.yourInformationPage.selectPageOption(this.page, option); 
 });
 
@@ -96,4 +96,8 @@ Then(/^I see "(Menu)" option at "Your Information" page$/, async function(option
     } else {
         await expect(this.yourInformationPage.getPageOption(this.page, option)).toBeVisible();
     }
+});
+
+Then(/^I don't see any badge in shopping cart at "Your Information" page$/, async function() {
+    await expect(this.yourInformationPage.getShoppingCartBadge(this.page)).toHaveCount(0);
 });
