@@ -47,7 +47,7 @@ When(/^I fill "(one random|zip\/postal code)" field at "Your Information" page$/
     this.filledFields.push(field);
 });
 
-When(/^I select "(Continue)" option at "Your Information" page$/, async function(option) {
+When(/^I select "(Continue|Dismiss error)" option at "Your Information" page$/, async function(option) {
     await this.yourInformationPage.selectPageOption(this.page, option); 
 });
 
@@ -74,6 +74,14 @@ Then(/^I don't see not-empty fields placeholder and underline in red font plus a
         await expect(this.yourInformationPage.getField(this.page, field, true), "Error: configuration should be not present").not.toBeVisible();
         await expect(this.yourInformationPage.getField(this.page, field, false)).toBeVisible();
         await expect(this.yourInformationPage.getField(this.page, field, false)).not.toBeEmpty();
+        await expect(this.yourInformationPage.getErrorIconAtFieldWithError(this.page, field)).not.toBeVisible();
+    }
+});
+
+Then(/^I don't see empty fields placeholder and underline in red font plus an error icon$/, async function() {
+    for (let field of Object.values(informationFields)) {
+        await expect(this.yourInformationPage.getField(this.page, field, true)).not.toBeVisible();
+        if (this.filledFields.includes(field)) { await expect(this.yourInformationPage.getField(this.page, field, false)).not.toBeEmpty();}
         await expect(this.yourInformationPage.getErrorIconAtFieldWithError(this.page, field)).not.toBeVisible();
     }
 });
