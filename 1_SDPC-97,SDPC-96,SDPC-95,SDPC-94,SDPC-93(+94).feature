@@ -329,7 +329,7 @@ Feature: All tests. March 2023
 		And I fill all fields at "Your Information" page
 		When I select "Cancel" option at "Your Information" page
 		Then I see "Your Cart" page
-		And I see the "product list" at "Your Cart" page
+		And I see the "products list" at "Your Cart" page
 	@TEST_SDPC-47 @TESTSET_SDPC-102 @TESTSET_SDPC-106 @YourInformation @page
 	Scenario: Shopping cart access from Your Information page
 		Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user

@@ -48,6 +48,11 @@ Then(/^I don't see any badge in shopping cart at "Your Cart" page$/, async funct
     await expect(this.shoppingCartPage.getShoppingCartBadge(this.page)).toHaveCount(0);
 });
 
+Then(/^I see the "products list" at "Your Cart" page$/, async function() {
+    const prouductsNumber = await this.shoppingCartPage.getListOfProductsFor(this.page, shoppingCartOptions.REMOVE).count();
+    expect(prouductsNumber).toBeGreaterThan(0);
+});
+
 Then(/^I see "selected" products at "Your Cart" page$/, async function() {
     const {products} = await getProductsAndRandomIndexesFor(this.page, productStatuses.SELECTED, 1, this.shoppingCartPage);
     await validateActualProductsForStatus(this.page, products, this.productsStatus[productStatuses.SELECTED], this.shoppingCartPage);

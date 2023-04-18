@@ -47,7 +47,7 @@ When(/^I fill "(one random|zip\/postal code)" field at "Your Information" page$/
     this.filledFields.push(field);
 });
 
-When(/^I select "(Continue|Dismiss error)" option at "Your Information" page$/, async function(option) {
+When(/^I select "(Cancel|Continue|Dismiss error)" option at "Your Information" page$/, async function(option) {
     await this.yourInformationPage.selectPageOption(this.page, option); 
 });
 
