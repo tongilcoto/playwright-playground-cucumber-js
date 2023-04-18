@@ -92,7 +92,7 @@ One of the benefits of BDD is that some tests can be built with current steps wi
 Thanks to all previous work, for all left menu tests in Detail page, only DetailStep file has been updated!! this is BDD great advantage
 
 
-## YOUR CART (shopping cart) page tests. Ticket SDPC-100
+## YOUR CART (shopping cart) page tests. Ticket SDPC-101
 
 Again the same rutine ... new page, new implemented steps the first tests plus some refactors, sometimes deep ones which implies strong regression on the previous implemented tests, and then just new parameters
 
@@ -101,6 +101,26 @@ I want to talk now about the technical issues I am finding dealing with Playwrig
 - I have learnt the difference between `locator.innerText()` and `locator.textContent()`: `innerText` joins each child element's text with `\n`, on the other hand `textContent` just concats all of them. So, it is something like `textContent() = innerText().trim()`. This difference is important because `locator` class has only `allTextContents()`method, there is no `allInnerTexts()` methods.
 
 Another decision I made is about split off some common elements in the page, typically headers and footers. This time the "Shopping Cart" icon "lives" in the pages header, which is a common element along the website, similar to the left menu. In this case, I decided to go ahead with the opposite solution. This time I will embed the header in each page files, so it is redundant code that should be addressed in next framework versions
+
+
+
+## YOUR INFORMATION page tests. Ticket SDPC-102
+
+When dealing with input fields and checking errors, there is more corners than must be adjusted. These actions can take a little more time.
+
+For these tests I create some visual assertions, like the `border-bottom-color` CSS style property. Just for demoing purposes
+
+
+
+## OVERVIEW page tests. Ticket SDPC-103
+
+Just following the same principles ....
+- Create a complex step going through all previous pages
+  - Sometimes you need to create a specific section for using standard values in a page.
+  - The method should be fixed for all pages that needed it, this way next engineer will know how to look for it before coding it. Or it can be assumed that exists for a given upflow page
+
+
+
 
 ## HEADS UP: CUCUMBER INNERS: `Global` variables are shared by all scenarios.
 

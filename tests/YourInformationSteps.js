@@ -1,6 +1,6 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
 const {productStatuses, shoppingCartOptions, informationFields, RANDOM, FIRST_EMPTY_FIELD_MISSING, errorTexts} = require('./src/constants.js');
-const {validLogin, selectStepRequiredProducts } = require('./src/utils.js');
+const {validLogin, selectStepRequiredProducts,fillYourInformationPage } = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 
@@ -16,12 +16,7 @@ Given(/^I proceed to "Your Information" page with "(\d)" selected random product
 });
 
 When(/^I fill all fields at "Your Information" page$/, async function() {
-    await this.yourInformationPage.fillFirstName(this.page);
-    this.filledFields.push(informationFields.FIRST_NAME);
-    await this.yourInformationPage.fillLastName(this.page);
-    this.filledFields.push(informationFields.LAST_NAME);
-    await this.yourInformationPage.fillPostalCode(this.page);
-    this.filledFields.push(informationFields.POSTAL_CODE);
+    this.filledFields = await fillYourInformationPage(this.page, this.yourInformationPage);
 });
 
 When(/^I fill "(first name|last name)" and "(last name|zip\/postal code)"$/, async function(option1, option2) {
