@@ -14,5 +14,6 @@ exports.errorIconForField = {
     "zip/postal code": this.fields['zip/postal code'] + ' ~ svg.error_icon'
 }
 exports.pageOptions = {
-    "Continue": '#continue'
+    "Continue": '#continue',
+    "Dismiss error": '.error-button'
 };
