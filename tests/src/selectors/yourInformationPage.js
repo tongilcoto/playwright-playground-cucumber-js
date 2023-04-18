@@ -17,5 +17,7 @@ exports.pageOptions = {
     "Cancel": '#cancel',
     "Continue": '#continue',
     "Dismiss error": '.error-button',
-    "Menu": '#react-burger-menu-btn'
+    "Menu": '#react-burger-menu-btn',
+    "Shopping Cart": '.shopping_cart_link'
 };
+exports.shoppingCartBadgeValue = '.shopping_cart_badge';

@@ -46,6 +46,10 @@ class yourInformationPage {
     getErrorIconAtFieldWithError(page, field) {
         return page.locator(this.selectors.errorIconForField[field])
     }
+
+    getShoppingCartBadge(page) {
+        return page.locator(this.selectors.shoppingCartBadgeValue);
+    }
         
 
 };

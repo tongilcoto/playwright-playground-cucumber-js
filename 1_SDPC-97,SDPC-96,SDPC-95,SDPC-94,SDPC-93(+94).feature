@@ -333,7 +333,7 @@ Feature: All tests. March 2023
 	@TEST_SDPC-47 @TESTSET_SDPC-102 @TESTSET_SDPC-106 @YourInformation @page
 	Scenario: Shopping cart access from Your Information page
 		Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user
-		When I select "Shopping Cart" option at "Your Cart" page
+		When I select "Shopping Cart" option at "Your Information" page
 		Then I see "Your Cart" page
 		And I see "selected" products at "Your Cart" page
 	@TEST_SDPC-46 @TESTSET_SDPC-102 @TESTSET_SDPC-106 @YourInformation @page
