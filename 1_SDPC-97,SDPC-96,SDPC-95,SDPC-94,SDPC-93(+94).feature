@@ -310,14 +310,14 @@ Feature: All tests. March 2023
 		And I select "Menu" option at "Your Information" page
 		When I select "All Items" option at the left menu
 		Then I see "Products" page
-		And I see the "Menu option" at "Products" page
+		And I see "Menu" option at "Products" page
 		And I see the "products grid" at "Products" page
 	@TEST_SDPC-50 @TESTSET_SDPC-102 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @YourInformation @page
 	Scenario: Close Burger menu in Your Information page closes left menu
 		Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user
 		And I select "Menu" option at "Your Information" page
 		When I select "Close" option at the left menu
-		Then I see the "Menu option" at "Your Information" page
+		Then I see "Menu" option at "Your Information" page
 	@TEST_SDPC-49 @TESTSET_SDPC-102 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @YourInformation @page
 	Scenario: Open Burger menu in Your Information page opens left menu
 		Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user
