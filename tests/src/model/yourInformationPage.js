@@ -5,6 +5,8 @@ class yourInformationPage {
 
     selectors = require('../selectors/yourInformationPage.js');
 
+    nextPageOption = 'Continue';
+
     getTitle(page) {
         return page.locator(this.selectors.title);
     }
@@ -24,7 +26,6 @@ class yourInformationPage {
     async fillField(page, field) {
         await this.getField(page, field, false).fill('random');
     }
-
 
     getPageOption(page, option) {
         return page.locator(this.selectors.pageOptions[option]);

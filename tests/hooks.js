@@ -28,6 +28,8 @@ Before(async function() {
 
     this.overviewPage = new global.overviewPage();
 
+    this.completePage = new global.completePage();
+
     this.browser = await chromium.launch({headless: false});
     this.testContext = await this.browser.newContext();
     this.page = await this.testContext.newPage();

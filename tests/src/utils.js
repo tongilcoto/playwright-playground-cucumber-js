@@ -1,5 +1,5 @@
 const {expect} = require('@playwright/test');
-const {pageUrls, passwords, shoppingCartOptions, productStatuses, positions, RANDOM} = require('./constants.js');
+const {pageUrls, passwords, shoppingCartOptions, productStatuses, positions, RANDOM, informationFields} = require('./constants.js');
 
 
 
@@ -80,6 +80,22 @@ async function validateActualProductsForStatus(page, actualProducts, expectedPro
     expect(existingExpectedProducts.length).toEqual(expectedProducts.length)
 }
 
+async function fillYourInformationPage(page, infoPage) {
+    const filledFields = []
+    await infoPage.fillFirstName(page);
+    filledFields.push(informationFields.FIRST_NAME);
+    await infoPage.fillLastName(page);
+    filledFields.push(informationFields.LAST_NAME);
+    await infoPage.fillPostalCode(page);
+    filledFields.push(informationFields.POSTAL_CODE);
+    return filledFields
+}
+
+async function fillAndProceedYourInformationPage(page, infoPage) {
+    const filledFields = await fillYourInformationPage(page, infoPage)
+    await infoPage.selectPageOption(page, infoPage.nextPageOption);
+    return filledFields
+}
 
 
 module.exports = {
@@ -92,5 +108,7 @@ module.exports = {
     validLogin,
     selectStepRequiredProducts,
     selectProductByComponentForStatusAndMethod,
-    validateActualProductsForStatus
+    validateActualProductsForStatus,
+    fillYourInformationPage,
+    fillAndProceedYourInformationPage
 };

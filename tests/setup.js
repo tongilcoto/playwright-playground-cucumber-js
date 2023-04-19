@@ -1,3 +1,4 @@
+const overviewPage = require('./src/model/overviewPage.js');
 
 global.loginPage = require('./src/model/loginPage.js');
 
@@ -12,3 +13,5 @@ global.leftMenu = require('./src/model/leftMenu.js');
 global.yourInformationPage = require('./src/model/yourInformationPage.js');
 
 global.overviewPage = require('./src/model/overviewPage.js');
+
+global.completePage = require('./src/model/overviewPage.js')
