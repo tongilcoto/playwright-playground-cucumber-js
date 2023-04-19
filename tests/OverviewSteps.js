@@ -16,6 +16,6 @@ Given(/^I checkout the purchase with "(\d)" selected random products when logged
     this.filledFields = await fillAndProceedYourInformationPage(this.page, this.yourInformationPage);
 });
 
-When(/^I select "(Finish)" option at "Overview" page$/, async function(option) {
+When(/^I select "(Cancel|Finish)" option at "Overview" page$/, async function(option) {
     await this.overviewPage.selectPageOption(this.page, option); 
 });
