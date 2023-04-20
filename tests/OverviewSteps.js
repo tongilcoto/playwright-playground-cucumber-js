@@ -25,9 +25,17 @@ Then(/^I see "(Menu)" option at "Overview" page$/, async function(option) {
         // PROBLEM: Playwright "expect.toBeVisible" doesn't work as a human being is assuming. Just technical flags that sometimes are not enough to determine the final visibility of an element.
         // HACK: try to click the Menu button to check if it is actually visible (and close the left menu afterwards)
         console.log("\nKnown Hack: Clicking " + option + " option")
-        await this.yourInformationPage.selectPageOption(this.page, option);
+        await this.overviewPage.selectPageOption(this.page, option);
         await this.leftMenu.selectOption(this.page, "Close");
     } else {
-        await expect(this.yourInformationPage.getPageOption(this.page, option)).toBeVisible();
+        await expect(this.overviewPage.getPageOption(this.page, option)).toBeVisible();
     }
+});
+
+Then(/^I don't see any badge in shopping cart at "Overview" page$/, async function() {
+    await expect(this.overviewPage.getShoppingCartBadge(this.page)).toHaveCount(0);
+});
+
+Then(/^I don't see "any" product at "Overview" page$/, async function() {
+    await expect(this.overviewPage.getListOfProducts(this.page)).toHaveCount(0);
 });
