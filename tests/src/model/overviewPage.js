@@ -15,6 +15,14 @@ class overviewPage {
         await this.getPageOption(page, option).click();
     }
 
+    getShoppingCartBadge(page) {
+        return page.locator(this.selectors.shoppingCartBadgeValue);
+    }
+
+    getListOfProducts(page) {
+        return page.locator(this.selectors.productCell);
+    }
+
 
 };
 
