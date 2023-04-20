@@ -32,3 +32,7 @@ Then(/^I see "(Menu)" option at "Complete" page$/, async function(option) {
         await expect(this.completePage.getPageOption(this.page, option)).toBeVisible();
     }
 });
+
+Then(/^I don't see any badge in shopping cart at "Complete" page$/, async function() {
+    await expect(this.completePage.getShoppingCartBadge(this.page)).toHaveCount(0);
+});
