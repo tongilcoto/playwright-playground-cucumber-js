@@ -3,6 +3,8 @@ class overviewPage {
 
     selectors = require('../selectors/overviewPage.js');
 
+    nextPageOption = 'Finish';
+
     getTitle(page) {
         return page.locator(this.selectors.title);
     }
