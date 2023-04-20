@@ -14,4 +14,4 @@ global.yourInformationPage = require('./src/model/yourInformationPage.js');
 
 global.overviewPage = require('./src/model/overviewPage.js');
 
-global.completePage = require('./src/model/overviewPage.js')
+global.completePage = require('./src/model/completePage.js')
