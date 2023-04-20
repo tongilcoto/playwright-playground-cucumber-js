@@ -161,7 +161,7 @@ Feature: All tests. March 2023
 		Given I finish the purchase with "1" selected random products when logged as "standard_user" user
 		And I select "Menu" option at "Complete" page
 		When I select "Close" option at the left menu
-		Then I see the "Menu option" at "Complete" page
+		Then I see "Menu" option at "Complete" page
 	@TEST_SDPC-73 @e2e @regression
 	Scenario: Your Cart page shows selected products in Detail page when there is 1 product in the cart
 		Given I am logged into Products page with "standard_user" user
@@ -203,7 +203,7 @@ Feature: All tests. March 2023
 		And I select "Menu" option at "Complete" page
 		When I select "All Items" option at the left menu
 		Then I see "Products" page
-		And I see the "Menu option" at "Products" page
+		And I see "Menu" option at "Products" page
 		And I see the "products grid" at "Products" page
 	@TEST_SDPC-67 @e2e @regression
 	Scenario: Your Cart page shows selected products in Products page when there is 1 product in the cart
