@@ -247,14 +247,14 @@ Feature: All tests. March 2023
 		Given I checkout the purchase with "1" selected random products when logged as "standard_user" user
 		And I select "Menu" option at "Overview" page
 		When I select "Close" option at the left menu
-		Then I see the "Menu option" at "Overview" page
+		Then I see "Menu" option at "Overview" page
 	@TEST_SDPC-60 @TESTSET_SDPC-103 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @Overview @page
 	Scenario: All Items left menu option in Overview page sends you to Products page
 		Given I checkout the purchase with "1" selected random products when logged as "standard_user" user
 		And I select "Menu" option at "Overview" page
 		When I select "All Items" option at the left menu
 		Then I see "Products" page
-		And I see the "Menu option" at "Products" page
+		And I see "Menu" option at "Products" page
 		And I see the "products grid" at "Products" page
 	@TEST_SDPC-59 @TESTSET_SDPC-103 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @LeftMenu @Overview @page
 	Scenario: Open Burger menu in Overview page opens left menu
