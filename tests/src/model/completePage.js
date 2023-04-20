@@ -15,6 +15,10 @@ class completePage {
         await this.getPageOption(page, option).click();
     }
 
+    getShoppingCartBadge(page) {
+        return page.locator(this.selectors.shoppingCartBadgeValue);
+    }
+
 };
 
 module.exports = completePage;
