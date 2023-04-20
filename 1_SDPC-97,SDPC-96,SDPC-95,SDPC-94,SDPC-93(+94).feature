@@ -125,7 +125,7 @@ Feature: All tests. March 2023
 	@TEST_SDPC-79 @TESTSET_SDPC-104 @TESTSET_SDPC-106 @Complete @page
 	Scenario: Shopping cart access from Complete page
 		Given I finish the purchase with "1" selected random products when logged as "standard_user" user
-		When I select "Shopping Cart" option at "Your Cart" page
+		When I select "Shopping Cart" option at "Complete" page
 		Then I see "Your Cart" page
 		And I don't see "any" product at "Your Cart" page
 	@TEST_SDPC-78 @TESTSET_SDPC-104 @TESTSET_SDPC-105 @TESTSET_SDPC-106 @Complete @LeftMenu @page
