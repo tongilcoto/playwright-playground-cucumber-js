@@ -17,6 +17,6 @@ Given(/^I finish the purchase with "(\d)" selected random products when logged a
     await this.overviewPage.selectPageOption(this.page, this.overviewPage.nextPageOption);
 });
 
-When(/^I select "(Back Home)" option at "Complete" page$/, async function(option) {
+When(/^I select "(Back Home|Shopping Cart)" option at "Complete" page$/, async function(option) {
     await this.completePage.selectPageOption(this.page, option); 
 });
