@@ -193,7 +193,7 @@ Feature: All tests. March 2023
 	@TEST_SDPC-69 @e2e @regression
 	Scenario: Your Cart page shows selected products in Products page when there are 2 products in the cart
 		Given I select "Add To Cart" option for "2" "unselected" random products when logged as "standard_user" user
-		When I select "Shopping Cart" option at "Product" page
+		When I select "Shopping Cart" option at "Products" page
 		Then I see "2" badge in shopping cart at "Your Cart" page
 		And I see correct name and price for "selected" products at "Your Cart" page
 		And I see correct quantity for selected products at "Your Cart" page
@@ -208,7 +208,7 @@ Feature: All tests. March 2023
 	@TEST_SDPC-67 @e2e @regression
 	Scenario: Your Cart page shows selected products in Products page when there is 1 product in the cart
 		Given I select "Add To Cart" option for "1" "unselected" random products when logged as "standard_user" user
-		When I select "Shopping Cart" option at "Product" page
+		When I select "Shopping Cart" option at "Products" page
 		Then I see "1" badge in shopping cart at "Your Cart" page
 		And I see correct name and price for "selected" products at "Your Cart" page
 		And I see correct quantity for selected products at "Your Cart" page

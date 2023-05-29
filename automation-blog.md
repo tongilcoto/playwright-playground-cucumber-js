@@ -120,6 +120,19 @@ Just following the same principles ....
   - The method should be fixed for all pages that needed it, this way next engineer will know how to look for it before coding it. Or it can be assumed that exists for a given upflow page
 
 
+## COMPLETE page tests. Ticket SDPC-104
+
+These last 2 pages where quite simples. 
+
+Once all page tests have been implemented, I used a branch-per-test aproach, i.e., **each test was implemented using a dedicated git branch**, it is time for End to End test
+
+
+## REGRESSION tests. Ticket SDPC-107
+
+**Currently all Regression test are also End to End test**
+
+Once the page steps are done, the E2E test should be quite quick to automate since the steps are mostly done, or they should be ... unless you have to refactor some test state variables ....
+
 
 
 ## HEADS UP: CUCUMBER INNERS: `Global` variables are shared by all scenarios.
@@ -286,3 +299,44 @@ Notice that with the current flow, the scenario status cannot be reverted to `pa
 
 The custom message does not appear in the run console output
 
+
+
+
+
+async function getProductForIndex(page, products, index, currentPage) {
+    const productText = await products.nth(index).innerText();
+    const product = currentPage.getProductByName(page, productText.split('\n')[currentPage.productNameIndex]);
+    return {product, productText};
+}
+
+--> selectMultipleProducts
+--> selectProductByComponentForStatusAndMethod
+--> validateActualProductsForStatus
+
+
+async function selectMultipleProducts(page, indexesSet, products, option, currentPage) {
+    const requiredProducts = []
+    for (const index of indexesSet) {
+        const {product, productText} = await getProductForIndex(page, products, index, currentPage);
+        await currentPage.selectProductOption(product, option);
+        requiredProducts.push(productText.split('\n')[currentPage.productNameIndex]);
+    }
+    return requiredProducts;
+}
+
+--> selectStepRequiredProducts
+--> When(/^I select "(Add To Cart|Remove)" option for "(\d)" "(selected|unselected)" random products at "Products" page$/, async function(option, quantity, status) {
+--> When(/^I select "(Remove)" option for random Cart product$/, async function(option) {
+
+
+async function validateActualProductsForStatus(page, actualProducts, expectedProducts, currentPage) {
+    const actualProductNames = []
+    for (let index = 0; index < await actualProducts.count(); index++) {
+        const {productText} = await getProductForIndex(page, actualProducts, index, currentPage);
+        actualProductNames.push(productText.split('\n')[currentPage.productNameIndex]);
+    };
+    const existingExpectedProducts = expectedProducts.filter(productName => actualProductNames.includes(productName))
+    expect(existingExpectedProducts.length).toEqual(expectedProducts.length)
+}
+
+--> Then(/^I see "selected" products at "Your Cart" page$/, async function() {

@@ -1,6 +1,6 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
 const {productStatuses, shoppingCartOptions, optionStatuses, positions} = require('./src/constants.js');
-const {validLogin, selectStepRequiredProducts, getProductsAndRandomIndexesFor, selectMultipleProducts, getProductNameAtPosition, validateActualProductsForStatus} = require('./src/utils.js');
+const {validLogin, selectStepRequiredProducts, getProductsAndRandomIndexesFor, selectMultipleProducts, getProductNameAtPosition, validateActualProductsForStatus, getDataForIndexFromArrayOfTextArrays} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 
@@ -69,3 +69,22 @@ Then(/^I see "(Menu)" option at "Your Cart" page$/, async function(option) {
         await expect(this.detailPage.getPageOption(this.page, option)).toBeVisible();
     }
 });
+
+Then(/^I see correct name and price for "selected" products at "Your Cart" page$/, async function() {
+    const actualProductsTexts = await this.shoppingCartPage.getListOfProducts(this.page).allInnerTexts()
+    expect(actualProductsTexts.length).toBe(this.productsStatus.selected.length)
+    const actualProductNames = getDataForIndexFromArrayOfTextArrays(actualProductsTexts.map(text => text.split('\n')), this.shoppingCartPage.productNameIndex)
+    // .toMatchObject checks also array items order
+    expect(actualProductNames).toMatchObject(getDataForIndexFromArrayOfTextArrays(this.productsStatus.selected, this.productsPage.productNameIndex))
+    const actualProductPrices = getDataForIndexFromArrayOfTextArrays(actualProductsTexts.map(text => text.split('\n')), this.shoppingCartPage.productPriceIndex)
+    // .toMatchObject checks also array items order
+    expect(actualProductPrices).toMatchObject(getDataForIndexFromArrayOfTextArrays(this.productsStatus.selected, this.productsPage.productPriceIndex))
+});
+
+Then(/^I see correct quantity for selected products at "Your Cart" page$/, async function() {
+    const actualProductsTexts = await this.shoppingCartPage.getListOfProducts(this.page).allInnerTexts()
+    expect(actualProductsTexts.length).toBe(this.productsStatus.selected.length)
+    const actualProductQuantities = getDataForIndexFromArrayOfTextArrays(actualProductsTexts.map(text => text.split('\n')), this.shoppingCartPage.productQuantityIndex)
+    // .toMatchObject checks also array items order
+    expect(actualProductQuantities).toMatchObject(this.productsStatus.selected.map(product => '1'))
+ });
