@@ -5,6 +5,8 @@ class productsPage {
 
     productNameIndex = 0;
 
+    productPriceIndex = 2;
+
     nextPageOption = 'Shopping Cart';
 
     getTitleElement(page) {

@@ -40,7 +40,7 @@ async function selectMultipleProducts(page, indexesSet, products, option, curren
     for (const index of indexesSet) {
         const {product, productText} = await getProductForIndex(page, products, index, currentPage);
         await currentPage.selectProductOption(product, option);
-        requiredProducts.push(productText.split('\n')[currentPage.productNameIndex]);
+        requiredProducts.push(productText.split('\n'));
     }
     return requiredProducts;
 }
@@ -76,8 +76,9 @@ async function validateActualProductsForStatus(page, actualProducts, expectedPro
         const {productText} = await getProductForIndex(page, actualProducts, index, currentPage);
         actualProductNames.push(productText.split('\n')[currentPage.productNameIndex]);
     };
-    const existingExpectedProducts = expectedProducts.filter(productName => actualProductNames.includes(productName))
-    expect(existingExpectedProducts.length).toEqual(expectedProducts.length)
+    const expectedProductNames = expectedProducts.map(product => product[0]); // expected products are always selected in Products page.
+    const existingExpectedProductsNames = expectedProductNames.filter(productName => actualProductNames.includes(productName))
+    expect(existingExpectedProductsNames.length).toEqual(expectedProducts.length)
 }
 
 async function fillYourInformationPage(page, infoPage) {
@@ -97,6 +98,13 @@ async function fillAndProceedYourInformationPage(page, infoPage) {
     return filledFields
 }
 
+function getDataForIndexFromArrayOfTextArrays(array, index) {
+    const output = []
+    for (const texts of array) {
+        output.push(texts[index])
+    }
+    return output
+}
 
 module.exports = {
     getNotRepeatedRandomList,
@@ -110,5 +118,6 @@ module.exports = {
     selectProductByComponentForStatusAndMethod,
     validateActualProductsForStatus,
     fillYourInformationPage,
-    fillAndProceedYourInformationPage
+    fillAndProceedYourInformationPage,
+    getDataForIndexFromArrayOfTextArrays
 };

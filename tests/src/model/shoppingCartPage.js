@@ -3,7 +3,11 @@ class shoppingCartPage {
 
     selectors = require('../selectors/shoppingCartPage.js');
 
+    productQuantityIndex = 0;
+
     productNameIndex = 1;
+
+    productPriceIndex = 3;
 
     nextPageOption = 'Checkout';
 
@@ -29,6 +33,10 @@ class shoppingCartPage {
 
     getListOfProductsFor(page, option) {
         return page.locator(this.selectors.productCell, {has: page.locator(this.selectors.productOptions[option])});
+    }
+
+    getListOfProducts(page) {
+        return page.locator(this.selectors.productCell);
     }
 
     getProductByName(page, text) {
