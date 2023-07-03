@@ -31,7 +31,9 @@ Before(async function() {
     this.completePage = new global.completePage();
 
     this.browser = await chromium.launch({headless: false});
-    this.testContext = await this.browser.newContext();
+    this.testContext = await this.browser.newContext({
+        viewport: { width: 1280, height: 1024 } // products grid needs this height to be completely visible
+      });
     this.page = await this.testContext.newPage();
 
 });
