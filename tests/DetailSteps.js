@@ -37,3 +37,8 @@ Then(/^I see "(Menu)" option at "Detail" page$/, async function(option) {
         await expect(this.detailPage.getPageOption(this.page, option)).toBeVisible();
     }
 });
+
+Then(/^I see correct name and price for the Detail's product$/, async function() {
+    await expect(this.detailPage.getProductName(this.page)).toHaveText(this.detailProduct.name);
+    await expect(this.detailPage.getProductPrice(this.page)).toHaveText(this.detailProduct.price);
+});

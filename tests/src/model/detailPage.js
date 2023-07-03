@@ -6,6 +6,10 @@ class detailPage {
     getProductName(page) {
         return page.locator(this.selectors.productName);
     }
+    
+    getProductPrice(page) {
+        return page.locator(this.selectors.productPrice);
+    }
 
     getProductOption(webElement, option) {
         return webElement.locator(this.selectors.productOptions[option]);
