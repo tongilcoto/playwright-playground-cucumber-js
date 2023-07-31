@@ -134,7 +134,7 @@ Scenario: Removing the last product at Detail page updates the shopping cart and
     Then I see product option is "Add to Cart" for the Detail's product
     And I don't see any badge in shopping cart at "Details" page
 
-Scenario: Back to products from Detail page sends you to Products page
+Scenario: Back To products from Detail page sends you to Products page
     Given I select "unselected" random product "name" when logged as "standard_user" user
     When I select "Back To Products" option at "Detail" page
     Then I see "Products" page
@@ -563,24 +563,24 @@ Scenario: Finishing the purchase resets the shopping cart
 
 
 
-Scenario: Detail's Back to Products keeps selected products with no cart change
+Scenario: Detail's Back To Products keeps selected products with no cart change
     Given I select "Add To Cart" option for "2" "unselected" random products when logged as "standard_user" user
     And I select "unselected" "random" product "name"
-    When I select "Back to Products" option at "Detail" page
+    When I select "Back To Products" option at "Detail" page
     Then I see product option is "Remove" for "selected" products at "Products" page
 
-Scenario: Detail's Back to Products keeps selected products after product is added
+Scenario: Detail's Back To Products keeps selected products after product is added
     Given I select "Add To Cart" option for "1" "unselected" random products when logged as "standard_user" user
     And I select "unselected" "random" product "name"
     And I select "Add To Cart" option at "Detail" page
-    When I select "Back to Products" option at "Detail" page
+    When I select "Back To Products" option at "Detail" page
     Then I see product option is "Remove" for "selected" products at "Products" page
 
-Scenario: Detail's Back to Products keeps selected products after product is removed
+Scenario: Detail's Back To Products keeps selected products after product is removed
     Given I select "Add To Cart" option for "2" "unselected" random products when logged as "standard_user" user
     And I select "selected" "random" product "name"
     And I select "Remove" option at "Detail" page
-    When I select "Back to Products" option at "Detail" page
+    When I select "Back To Products" option at "Detail" page
     Then I see product option is "Remove" for "selected" products at "Products" page
 
 Scenario: Cart's Continue Shopping keeps selected products with no cart changed
