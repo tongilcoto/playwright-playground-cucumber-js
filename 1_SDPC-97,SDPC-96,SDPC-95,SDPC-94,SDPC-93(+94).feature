@@ -60,11 +60,11 @@ Feature: All tests. March 2023
 		And I see correct name and price for "selected" products at "Your Cart" page
 		And I see correct quantity for selected products at "Your Cart" page
 	@TEST_SDPC-88 @e2e @regression
-	Scenario: Detail's Back to Products keeps selected products after product is added
+	Scenario: Detail's Back To Products keeps selected products after product is added
 		Given I select "Add To Cart" option for "1" "unselected" random products when logged as "standard_user" user
 		And I select "unselected" "random" product "name"
 		And I select "Add To Cart" option at "Detail" page
-		When I select "Back to Products" option at "Detail" page
+		When I select "Back To Products" option at "Detail" page
 		Then I see product option is "Remove" for "selected" products at "Products" page
 	@TEST_SDPC-87 @e2e @regression
 	Scenario: Cart's Continue Shopping keeps selected products after product is removed
@@ -96,11 +96,11 @@ Feature: All tests. March 2023
 		And I see correct name and price for "selected" products at "Your Cart" page
 		And I see correct quantity for selected products at "Your Cart" page
 	@TEST_SDPC-83 @e2e @regression
-	Scenario: Detail's Back to Products keeps selected products after product is removed
+	Scenario: Detail's Back To Products keeps selected products after product is removed
 		Given I select "Add To Cart" option for "2" "unselected" random products when logged as "standard_user" user
 		And I select "selected" "random" product "name"
 		And I select "Remove" option at "Detail" page
-		When I select "Back to Products" option at "Detail" page
+		When I select "Back To Products" option at "Detail" page
 		Then I see product option is "Remove" for "selected" products at "Products" page
 	@TEST_SDPC-82 @e2e @regression
 	Scenario: Overview page shows selected products with correct total when there are 2 products in the cart
@@ -110,10 +110,10 @@ Feature: All tests. March 2023
 		And I see correct quantity for selected products at "Overview" page
 		And I see correct total price for selected products
 	@TEST_SDPC-81 @e2e @regression
-	Scenario: Detail's Back to Products keeps selected products with no cart change
+	Scenario: Detail's Back To Products keeps selected products with no cart change
 		Given I select "Add To Cart" option for "2" "unselected" random products when logged as "standard_user" user
 		And I select "unselected" "random" product "name"
-		When I select "Back to Products" option at "Detail" page
+		When I select "Back To Products" option at "Detail" page
 		Then I see product option is "Remove" for "selected" products at "Products" page
 	@TEST_SDPC-80 @e2e @regression
 	Scenario: Finishing the purchase resets the shopping cart
@@ -393,7 +393,7 @@ Feature: All tests. March 2023
 		When I login with user "valid" password
 		Then I see "Products" page
 	@TEST_SDPC-38 @TESTSET_SDPC-100 @TESTSET_SDPC-106 @Detail @page
-	Scenario: Back to products from Detail page sends you to Products page
+	Scenario: Back To products from Detail page sends you to Products page
 		Given I select "unselected" random product "name" when logged as "standard_user" user
 		When I select "Back To Products" option at "Detail" page
 		Then I see "Products" page

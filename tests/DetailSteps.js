@@ -3,7 +3,6 @@ const { expect } = require('@playwright/test');
 const { productStatuses, shoppingCartOptions } = require('./src/constants.js');
 
 
-
 Then(/^I see Detail page for "(selected)" product$/, async function(status) {
     await expect(this.detailPage.getProductNameLocator(this.page)).toHaveText(this.detailProduct.name);
 });
@@ -48,3 +47,4 @@ Then(/^I see correct name and price for the Detail's product$/, async function()
     await expect(this.detailPage.getProductNameLocator(this.page)).toHaveText(this.detailProduct.name);
     await expect(this.detailPage.getProductPriceLocator(this.page)).toHaveText(this.detailProduct.price);
 });
+
