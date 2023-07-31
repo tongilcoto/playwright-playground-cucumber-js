@@ -2,7 +2,7 @@
 
 ## LOGIN tests. Ticket SDPC-98
 
-The very first Login tests. They aree hosted by SDPC-98. They are just 3 tests
+The very first Login tests. They are hosted by SDPC-98. They are just 3 tests
 
 
 ## PRODUCTS page tests. Ticket SDPC-99
