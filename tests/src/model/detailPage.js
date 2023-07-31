@@ -3,12 +3,20 @@ class detailPage {
 
     selectors = require('../selectors/detailPage.js');
 
-    getProductName(page) {
+    getProductNameLocator(page) {
         return page.locator(this.selectors.productName);
     }
+
+    async getProductName(page) {
+        return await this.getProductNameLocator(page).textContent()
+    }
     
-    getProductPrice(page) {
+    getProductPriceLocator(page) {
         return page.locator(this.selectors.productPrice);
+    }
+
+    async getProductPrice(page) {
+        return await this.getProductPriceLocator(page).textContent()
     }
 
     getProductOption(webElement, option) {

@@ -134,6 +134,10 @@ Once all page tests have been implemented, I used a branch-per-test aproach, i.e
 Once the page steps are done, the E2E test should be quite quick to automate since the steps are mostly done, or they should be ... unless you have to refactor some test state variables ....
 
 
+## REGRESSION tests. Ticket SDPC-73
+
+Levaraging previous code, when coding this SDPC-73 test, SDPC-75, SDPC-76 and SDPC-77 are also passed!!!
+
 
 ## HEADS UP: CUCUMBER INNERS: `Global` variables are shared by all scenarios.
 
@@ -241,7 +245,7 @@ So, it would be enough if the variables at the `global` object get initialized i
 
 ## YOUR INFORMATION (shopping cart) page tests. Ticket SDPC-100
 
-I have found an issue with my of my principles ... this principle is to keep stesps files free of details of the implementation: no literal, no technical value, etc, this information should be managed by the POM (page object model). Usually literals are implemented as variables in the `constants.js` file. But this time I have found that I was using a technical value as a literal, and that solution is breaking this principle. And even worse, that literal/technical value in `contants.js` was replicating a value already stored in the POM!!! 
+I have found an issue with my of my principles ... this principle is to keep steps files free of details of the implementation: no literal, no technical value, etc, this information should be managed by the POM (page object model). Usually literals are implemented as variables in the `constants.js` file. But this time I have found that I was using a technical value as a literal, and that solution is breaking this principle. And even worse, that literal/technical value in `contants.js` was replicating a value already stored in the POM!!! 
 So the solution I implement now is to add a property in the page class to host that value, and the name of the property refers to the funcion, not the name of the literal:
 
 Before. Step:
