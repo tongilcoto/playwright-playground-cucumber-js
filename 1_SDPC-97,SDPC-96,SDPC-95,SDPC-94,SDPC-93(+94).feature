@@ -165,7 +165,7 @@ Feature: All tests. March 2023
 	@TEST_SDPC-73 @e2e @regression
 	Scenario: Your Cart page shows selected products in Detail page when there is 1 product in the cart
 		Given I am logged into Products page with "standard_user" user
-		And I select "selected" "random" product "name"
+		And I select "unselected" "random" product "name"
 		And I select "Add To Cart" option at "Detail" page
 		When I select "Shopping Cart" option at "Detail" page
 		Then I see "1" badge in shopping cart at "Your Cart" page
