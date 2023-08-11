@@ -57,3 +57,5 @@ exports.shoppingCartOptions = {
     REMOVE: 'Remove'
 };
 
+exports.TAX_PERCENTAGE = 8;
+

@@ -1,6 +1,6 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
-const {productStatuses, shoppingCartOptions} = require('./src/constants.js');
-const {validLogin, selectStepRequiredProducts, fillAndProceedYourInformationPage } = require('./src/utils.js');
+const {productStatuses, shoppingCartOptions, TAX_PERCENTAGE} = require('./src/constants.js');
+const {fillAndProceedYourInformationPage, getDataForIndexFromArrayOfTextArrays, selectStepRequiredProducts, validLogin } = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 
@@ -38,4 +38,33 @@ Then(/^I don't see any badge in shopping cart at "Overview" page$/, async functi
 
 Then(/^I don't see "any" product at "Overview" page$/, async function() {
     await expect(this.overviewPage.getListOfProducts(this.page)).toHaveCount(0);
+});
+
+Then(/^I see correct name and price for "selected" products at "Overview" page$/, async function() {
+    const webNames = await this.overviewPage.getProductNames(this.page);
+    expect(webNames).toHaveLength(this.productsStatus.selected.length)
+    const expectedNames = getDataForIndexFromArrayOfTextArrays(this.productsStatus.selected, this.productsPage.productNameIndex)
+    expect(webNames).toEqual(expectedNames)
+    const webPrices = await this.overviewPage.getProductPrices(this.page);
+    expect(webPrices).toHaveLength(this.productsStatus.selected.length)
+    const expectedPrices = getDataForIndexFromArrayOfTextArrays(this.productsStatus.selected, this.productsPage.productPriceIndex)
+    expect(webPrices).toEqual(expectedPrices)
+});
+
+Then(/^I see correct quantity for selected products at "Overview" page$/, async function() {
+    const webQuantities = await this.overviewPage.getProductQuantities(this.page);
+    expect(webQuantities).toHaveLength(this.productsStatus.selected.length)
+    const expectedQuantities = []
+    this.productsStatus.selected.forEach(product => expectedQuantities.push("1"))
+    expect(webQuantities).toEqual(expectedQuantities)
+});
+
+Then(/^I see correct total price for selected products$/, async function() {
+    const webItemsTotalPrice = await this.overviewPage.getItemsTotalPrice(this.page);
+    const expectedItemsPrices = getDataForIndexFromArrayOfTextArrays(this.productsStatus.selected, this.productsPage.productPriceIndex)
+    let expectedItemsTotal = 0
+    expectedItemsPrices.forEach(price => expectedItemsTotal += parseFloat(price.slice(1)))
+    expect(parseFloat(webItemsTotalPrice.slice(1))).toEqual(expectedItemsTotal)
+    const webTotalPrice = parseFloat((await this.overviewPage.getTotalPrice(this.page)).slice(1))
+    expect(webTotalPrice.toFixed(2)).toEqual((expectedItemsTotal * (1 + TAX_PERCENTAGE/100)).toFixed(2))
 });
