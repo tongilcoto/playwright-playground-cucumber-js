@@ -7,3 +7,5 @@ exports.pageOptions = {
 }
 exports.productCell = '.cart_item';
 exports.shoppingCartBadgeValue = '.shopping_cart_badge';
+exports.itemsTotalPrice = '.summary_subtotal_label';
+exports.totalPrice = '.summary_total_label';

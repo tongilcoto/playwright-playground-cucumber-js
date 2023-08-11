@@ -540,14 +540,16 @@ Scenario: Your Cart page shows selected products in both Products page and Detai
     And I see correct quantity for selected products at "Your Cart" page
 
 Scenario: Overview page shows selected products when there is 1 product in the cart
-    Given I checkout the purchase with "1" selected random products when logged as "standard_user" user
+	Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user
+	And I fill all fields at "Your Information" page
     When I select "Continue" option at "Your Information" page
     Then I see correct name and price for "selected" products at "Overview" page
     And I see correct quantity for selected products at "Overview" page
     And I see correct total price for selected products
 
 Scenario: Overview page shows selected products with correct total when there are 2 products in the cart
-    Given I checkout the purchase with "2" selected random products when logged as "standard_user" user
+	Given I proceed to "Your Information" page with "1" selected random products when logged as "standard_user" user
+	And I fill all fields at "Your Information" page
     When I select "Continue" option at "Your Information" page
     Then I see correct name and price for "selected" products at "Overview" page
     And I see correct quantity for selected products at "Overview" page
