@@ -2,7 +2,6 @@ const {expect} = require('@playwright/test');
 const {pageUrls, passwords, shoppingCartOptions, productStatuses, positions, RANDOM, informationFields} = require('./constants.js');
 
 
-
 async function validLogin(user, page, loginPage) {
     await page.goto(pageUrls['login']);
     await loginPage.loginWithCredentials(page, user, passwords["valid"]);
@@ -109,6 +108,13 @@ function getDataForIndexFromArrayOfTextArrays(array, index) {
     return output
 }
 
+function getExpectedProductList(desiredStatus, productsStatus, index) {
+    const contraryStatus =  desiredStatus === productStatuses.SELECTED ? productStatuses.UNSELECTED : productStatuses.SELECTED
+    const originalList = productsStatus[desiredStatus].map(item => item[index]);
+    const toSubstractList = productsStatus[contraryStatus].map(item => item[index]);
+    return originalList.filter(item => !toSubstractList.includes(item))
+}
+
 module.exports = {
     getNotRepeatedRandomList,
     selectMultipleProducts,
@@ -122,5 +128,6 @@ module.exports = {
     validateActualProductsForStatus,
     fillYourInformationPage,
     fillAndProceedYourInformationPage,
-    getDataForIndexFromArrayOfTextArrays
+    getDataForIndexFromArrayOfTextArrays,
+    getExpectedProductList
 };

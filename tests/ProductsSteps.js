@@ -1,6 +1,6 @@
 const {Given, When, Then} = require('@cucumber/cucumber');
 const {shoppingCartOptions, productStatuses, RANDOM} = require('./src/constants.js');
-const {selectMultipleProducts, getProductNameAtPosition, validateProductShoppingCartOption, getProductsAndRandomIndexesFor, validLogin, selectStepRequiredProducts, selectProductByComponentForStatusAndMethod} = require('./src/utils.js');
+const {selectMultipleProducts, getProductNameAtPosition, validateProductShoppingCartOption, getProductsAndRandomIndexesFor, validLogin, selectStepRequiredProducts, selectProductByComponentForStatusAndMethod, getExpectedProductList} = require('./src/utils.js');
 const {expect} = require('@playwright/test');
 
 Given(/^I select "(Add To Cart)" option for "(\d)" "(unselected)" random products when logged as "(standard_user)" user$/, async function(option, quantity, status, user) {
@@ -23,7 +23,6 @@ When(/^I select "(Add To Cart|Remove)" option for "(\d)" "(selected|unselected)"
 });
 
 Then(/^I see product option is "(Add To Cart|Remove)" for "(selected|unselected|all)" products at "Products" page$/, async function(option, status) {
-    let stepProducts
     if (status === productStatuses.ALL) {
         stepProducts = await this.productsPage.getAllProductNames(this.page)
     } else {
