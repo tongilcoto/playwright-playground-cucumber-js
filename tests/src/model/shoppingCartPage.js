@@ -9,6 +9,8 @@ class shoppingCartPage {
 
     productPriceIndex = 3;
 
+    productInfoFieldList = ['quantity', 'name', 'description', 'price']
+
     nextPageOption = 'Checkout';
 
     getTitle(page) {

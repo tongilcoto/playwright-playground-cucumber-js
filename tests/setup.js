@@ -1,5 +1,3 @@
-const overviewPage = require('./src/model/overviewPage.js');
-
 global.loginPage = require('./src/model/loginPage.js');
 
 global.productsPage = require('./src/model/productsPage.js');

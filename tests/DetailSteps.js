@@ -9,9 +9,9 @@ Then(/^I see Detail page for "(selected)" product$/, async function(status) {
 
 When(/^I select "(Add To Cart|Remove)" option at "Detail" page$/, async function(option) {
     await this.detailPage.selectProductOption(this.page, option);
-    const product = [];
-    product[this.productsPage.productNameIndex] = await this.detailPage.getProductName(this.page);
-    product[this.productsPage.productPriceIndex] = await this.detailPage.getProductPrice(this.page);
+    const product = {};
+    product.name = await this.detailPage.getProductName(this.page);
+    product.price = await this.detailPage.getProductPrice(this.page);
     this.productsStatus[option === shoppingCartOptions.ADDTOCART ? productStatuses.SELECTED : productStatuses.UNSELECTED].push(product);
 });
 

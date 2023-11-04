@@ -43,12 +43,10 @@ Then(/^I don't see "any" product at "Overview" page$/, async function() {
 Then(/^I see correct name and price for "selected" products at "Overview" page$/, async function() {
     const webNames = await this.overviewPage.getProductNames(this.page);
     expect(webNames).toHaveLength(this.productsStatus.selected.length)
-    const expectedNames = getDataForIndexFromArrayOfTextArrays(this.productsStatus.selected, this.productsPage.productNameIndex)
-    expect(webNames).toEqual(expectedNames)
+    expect(webNames).toEqual(this.productsStatus.selected.map(item => item.name))
     const webPrices = await this.overviewPage.getProductPrices(this.page);
     expect(webPrices).toHaveLength(this.productsStatus.selected.length)
-    const expectedPrices = getDataForIndexFromArrayOfTextArrays(this.productsStatus.selected, this.productsPage.productPriceIndex)
-    expect(webPrices).toEqual(expectedPrices)
+    expect(webPrices).toEqual(this.productsStatus.selected.map(item => item.price))
 });
 
 Then(/^I see correct quantity for selected products at "Overview" page$/, async function() {
@@ -61,7 +59,7 @@ Then(/^I see correct quantity for selected products at "Overview" page$/, async 
 
 Then(/^I see correct total price for selected products$/, async function() {
     const webItemsTotalPrice = await this.overviewPage.getItemsTotalPrice(this.page);
-    const expectedItemsPrices = getDataForIndexFromArrayOfTextArrays(this.productsStatus.selected, this.productsPage.productPriceIndex)
+    const expectedItemsPrices = this.productsStatus.selected.map(item => item.price)
     let expectedItemsTotal = 0
     expectedItemsPrices.forEach(price => expectedItemsTotal += parseFloat(price.slice(1)))
     expect(parseFloat(webItemsTotalPrice.slice(1))).toEqual(expectedItemsTotal)
