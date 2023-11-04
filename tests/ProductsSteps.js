@@ -23,7 +23,14 @@ When(/^I select "(Add To Cart|Remove)" option for "(\d)" "(selected|unselected)"
 });
 
 Then(/^I see product option is "(Add To Cart|Remove)" for "(selected|unselected|all)" products at "Products" page$/, async function(option, status) {
-    const stepProducts = status === productStatuses.ALL? await this.productsPage.getAllProductNames(this.page) : getExpectedProductList(status, this.productsStatus, this.productsPage.productNameIndex);
+    if (status === productStatuses.ALL) {
+        stepProducts = await this.productsPage.getAllProductNames(this.page)
+    } else {
+        stepProducts = this.productsStatus[status].map(item => item.name);
+        const contraryStatus = [productStatuses.SELECTED, productStatuses.UNSELECTED].pop(status)
+        const contraryStatusProducts = this.productsStatus[contraryStatus].map(item => item.name);
+        stepProducts = stepProducts.filter(item => !contraryStatusProducts.includes(item))
+    }
     for (const productText of stepProducts) {
         await validateProductShoppingCartOption(this.page, this.productsPage, productText, option);
     }

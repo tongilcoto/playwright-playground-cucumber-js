@@ -75,10 +75,10 @@ Then(/^I see correct name and price for "selected" products at "Your Cart" page$
     expect(actualProductsTexts.length).toBe(this.productsStatus.selected.length)
     const actualProductNames = getDataForIndexFromArrayOfTextArrays(actualProductsTexts.map(text => text.split('\n')), this.shoppingCartPage.productNameIndex)
     // .toMatchObject checks also array items order
-    expect(actualProductNames).toMatchObject(getDataForIndexFromArrayOfTextArrays(this.productsStatus.selected, this.productsPage.productNameIndex))
+    expect(actualProductNames).toMatchObject(this.productsStatus.selected.map(item => item.name))
     const actualProductPrices = getDataForIndexFromArrayOfTextArrays(actualProductsTexts.map(text => text.split('\n')), this.shoppingCartPage.productPriceIndex)
     // .toMatchObject checks also array items order
-    expect(actualProductPrices).toMatchObject(getDataForIndexFromArrayOfTextArrays(this.productsStatus.selected, this.productsPage.productPriceIndex))
+    expect(actualProductPrices).toMatchObject(this.productsStatus.selected.map(item => item.price))
 });
 
 Then(/^I see correct quantity for selected products at "Your Cart" page$/, async function() {

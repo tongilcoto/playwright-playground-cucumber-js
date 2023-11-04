@@ -39,7 +39,10 @@ async function selectMultipleProducts(page, indexesSet, products, option, curren
     for (const index of indexesSet) {
         const {product, productText} = await getProductForIndex(page, products, index, currentPage);
         await currentPage.selectProductOption(product, option);
-        requiredProducts.push(productText.split('\n'));
+        const productInfo = Object.fromEntries(
+            currentPage.productInfoFieldList.map((key, index) => [key, productText.split('\n')[index]]),
+        );
+        requiredProducts.push(productInfo);
     }
     return requiredProducts;
 }

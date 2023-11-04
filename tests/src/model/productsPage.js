@@ -7,6 +7,8 @@ class productsPage {
 
     productPriceIndex = 2;
 
+    productInfoFieldList = ['name', 'description', 'price']
+
     nextPageOption = 'Shopping Cart';
 
     getTitleElement(page) {
