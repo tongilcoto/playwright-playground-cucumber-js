@@ -36,13 +36,15 @@ async function getProductForIndex(page, products, index, currentPage) {
 
 async function selectMultipleProducts(page, indexesSet, products, option, currentPage) {
     const requiredProducts = []
+    let recount = 0;
     for (const index of indexesSet) {
-        const {product, productText} = await getProductForIndex(page, products, index, currentPage);
+        const {product, productText} = await getProductForIndex(page, products, index-recount, currentPage);
         await currentPage.selectProductOption(product, option);
         const productInfo = Object.fromEntries(
             currentPage.productInfoFieldList.map((key, index) => [key, productText.split('\n')[index]]),
         );
         requiredProducts.push(productInfo);
+        recount += 1
     }
     return requiredProducts;
 }
